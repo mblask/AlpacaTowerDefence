@@ -4,6 +4,9 @@ using UnityEngine;
 public class EnemyTemplate : ScriptableObject
 {
     public bool IsActive;
+    public string Name;
+    public Sprite Sprite;
+    public Color Color;
     public float Health;
     public float MovingSpeed;
     public float Range;

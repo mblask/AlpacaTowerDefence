@@ -67,7 +67,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         if (enemyTemplates != null)
             availableTemplates.AddRange(enemyTemplates);
         else
-            availableTemplates.Add(_gameAssets.EnemyTemplates[0]);
+            availableTemplates.AddRange(_gameAssets.EnemyTemplates);
 
         _lastSpawnedWave.Clear();
         for (int i = 0; i < enemyNumber; i++)

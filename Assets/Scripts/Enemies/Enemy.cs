@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IEnemy
 {
+    private SpriteRenderer _spriteRenderer;
     private EnemyTemplate _enemyTemplate;
 
     private bool _isActive = true;
@@ -25,6 +26,11 @@ public class Enemy : MonoBehaviour, IEnemy
     private IEnvironmentGenerator _environmentGenerator;
     private IResourceSpawner _resourceSpawner;
     private ILevelChecker _levelChecker;
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     private void Start()
     {
@@ -52,6 +58,9 @@ public class Enemy : MonoBehaviour, IEnemy
         _positionAroundWaypoint = Vector3.zero;
 
         _isActive = enemyTemplate.IsActive;
+        name = enemyTemplate.Name;
+        _spriteRenderer.sprite = enemyTemplate.Sprite;
+        _spriteRenderer.color = enemyTemplate.Color;
         _health = enemyTemplate.Health;
         _movingSpeed = enemyTemplate.MovingSpeed;
         _range = enemyTemplate.Range;
