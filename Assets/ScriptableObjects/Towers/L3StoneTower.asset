@@ -21,8 +21,10 @@ MonoBehaviour:
   CrewNumber: 5
   BaseRepair: 1
   Damage: {x: 3, y: 5}
+  EnemyCheckRate: 0.1
   Precision: 0.7
   ShootingRate: 1
+  ShootingRatePercentageWhileRepairing: 0.75
   Range: 3
   ResistDamage: 0.1
   ChanceToKillCrewMember: 7

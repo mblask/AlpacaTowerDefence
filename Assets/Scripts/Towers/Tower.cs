@@ -16,7 +16,7 @@ public class Tower : Building, ITower
     private bool _isActive = true;
 
     [Header("Read-only")]
-    [SerializeField] private TowerHandler _towerHandler;
+    [SerializeField] private ITowerHandler _towerHandler;
 
     private void Awake()
     {

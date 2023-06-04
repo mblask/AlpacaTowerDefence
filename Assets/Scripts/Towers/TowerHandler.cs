@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class TowerHandler
+public class TowerHandler : ITowerHandler
 {
     private Transform _towerTransform;
     private Transform _shootingSpotTransform;
@@ -27,7 +27,7 @@ public class TowerHandler
     private float _enemyCheckingTimer = 0.0f;
     private float _timer = 0.0f;
 
-    [field:SerializeField] public float ChanceToKillCrewMember { get; set; }
+    [field: SerializeField] public float ChanceToKillCrewMember { get; set; }
 
     private float _towerShootingRatePercentageWhileRepairing;
 
@@ -92,7 +92,7 @@ public class TowerHandler
 
         _timer += Time.deltaTime;
 
-        if (_timer < _shootingRate * (CrewMembers / _template.CrewNumber))
+        if (_timer < _shootingRate)
             return;
 
         _timer = 0.0f;
