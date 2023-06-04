@@ -42,7 +42,7 @@ public class Builder : MonoBehaviour, IBuilder
 
     private void buildTower(TowerTemplate towerTemplate, Vector3 position)
     {
-        ITower tower = Instantiate(_gameAssets.Tower, position, Quaternion.identity, null).GetComponent<ITower>();
+        ITower tower = Instantiate(_gameAssets.Tower, position, Quaternion.identity, BuildingsContainer.GetContainer()).GetComponent<ITower>();
         tower.SetupTower(towerTemplate);
         _resourcesManager.UpdateGold(-towerTemplate.Cost);
     }

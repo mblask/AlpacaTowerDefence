@@ -13,10 +13,11 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         }
     }
 
-    [SerializeField] private bool _spawnEnemies = true;
+    [SerializeField] private bool _spawnEnemies = false;
     [SerializeField] private int _numberOfWaves = 5;
 
     private Transform _enemiesContainer;
+    private List<EnemyTemplate> _enemiesToSpawn = new List<EnemyTemplate>();
     private List<Transform> _lastSpawnedWave = new List<Transform>();
 
     private GameAssets _gameAssets;
@@ -25,19 +26,19 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
 
     private float _timer = 0.0f;
     private float _spawnTime;
-
+    
     private void Awake()
     {
         _instance = this;
         _enemiesContainer = transform.Find("Enemies");
     }
-
+    
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
         _checkpointManager = CheckpointManager.Instance;
         _levelChecker = LevelChecker.Instance;
-
+    
         _spawnTime = Random.Range(0.0f, 2.0f);
     }
 
@@ -61,19 +62,24 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         }
     }
 
-    public void SpawnEnemyWave(int enemyNumber = 5, List<EnemyTemplate> enemyTemplates = null)
+    public void SetupSpawner(LevelSettings levelSettings)
     {
-        List<EnemyTemplate> availableTemplates = new List<EnemyTemplate>();
-        if (enemyTemplates != null)
-            availableTemplates.AddRange(enemyTemplates);
-        else
-            availableTemplates.AddRange(_gameAssets.EnemyTemplates);
+        _numberOfWaves = levelSettings.EnemyWaves;
+        _enemiesToSpawn = levelSettings.Enemies;
+
+        _spawnEnemies = true;
+    }
+
+    public void SpawnEnemyWave(int enemyNumber = 5)
+    {
+        if (_enemiesToSpawn.Count == 0)
+            _enemiesToSpawn.Add(_gameAssets.EnemyTemplates.Find(template => template.Name == "Footman"));
 
         _lastSpawnedWave.Clear();
         for (int i = 0; i < enemyNumber; i++)
         {
             Vector2 spawnPosition = _checkpointManager.GetSpawnPoint().position + Utilities.GetRandomVector3(0.5f);
-            _lastSpawnedWave.Add(SpawnEnemy(spawnPosition, availableTemplates.GetRandomElement()));
+            _lastSpawnedWave.Add(SpawnEnemy(spawnPosition, _enemiesToSpawn.GetRandomElement()));
         }
 
         _levelChecker.AddEnemiesSpawned(enemyNumber);

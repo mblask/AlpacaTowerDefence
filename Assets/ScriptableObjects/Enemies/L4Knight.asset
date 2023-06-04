@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f77585d8bdea367489bbfa20f409e539, type: 3}
-  m_Name: Knight
+  m_Name: L4Knight
   m_EditorClassIdentifier: 
   IsActive: 1
   Name: Knight
@@ -18,7 +18,7 @@ MonoBehaviour:
   Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   Health: 20
   MovingSpeed: 1
-  Range: 1.3
+  Range: 1.8
   TowerSearchTimeInterval: 0.5
   GoldDrop: {x: 2, y: 5}
   WoodDrop: {x: 1, y: 4}

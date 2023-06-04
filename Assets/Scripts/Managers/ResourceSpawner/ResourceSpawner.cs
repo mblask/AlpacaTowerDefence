@@ -13,7 +13,7 @@ public class ResourceSpawner : MonoBehaviour, IResourceSpawner
     }
 
     private IResourcesManager _resourceManager;
-
+    
     private void Awake()
     {
         _instance = this;

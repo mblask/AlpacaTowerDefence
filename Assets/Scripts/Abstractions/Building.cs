@@ -16,4 +16,9 @@ public abstract class Building : InteractableObject
     /// </summary>
     /// <param name="value"></param>
     public abstract void Damage(float value);
+
+    /// <summary>
+    /// Toggle repair process of a building, effectivelly lowering its effectivity but slowly repairing damages
+    /// </summary>
+    public abstract void Repair();
 }

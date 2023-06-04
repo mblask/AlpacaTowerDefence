@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae085530c4b822140a355cba047814f4, type: 3}
-  m_Name: StoneTower
+  m_Name: L3StoneTower
   m_EditorClassIdentifier: 
   Name: Stone Tower
   Building: 2
@@ -25,3 +25,4 @@ MonoBehaviour:
   ShootingRate: 1
   Range: 3
   ResistDamage: 0.1
+  ChanceToKillCrewMember: 7

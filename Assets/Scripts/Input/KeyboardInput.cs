@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public class KeyboardInput : MonoBehaviour
 
     private Dictionary<KeyBinding, KeyCode> _keyBindingDictionary;
 
+    [Header("Building keys")]
     [SerializeField] private KeyCode _woodenOutpostKey;
     [SerializeField] private KeyCode _woodenTowerKey;
     [SerializeField] private KeyCode _stoneTowerKey;
@@ -26,7 +28,14 @@ public class KeyboardInput : MonoBehaviour
     [SerializeField] private KeyCode _fortKey;
     [SerializeField] private KeyCode _castleKey;
 
+    [Header("All same-sort-building-action key")]
+    [SerializeField] private KeyCode _allEqualActionKey;
+
+    [Header("Building action keys")]
+    [SerializeField] private KeyCode _buildingRepairKey;
+
     private IBuildingManager _buildingManager;
+    private IInteractableManager _interactableManager;
 
     private void Awake()
     {
@@ -36,6 +45,7 @@ public class KeyboardInput : MonoBehaviour
     private void Start()
     {
         _buildingManager = BuildingManager.Instance;
+        _interactableManager = InteractableManager.Instance;
 
         _keyBindingDictionary = new Dictionary<KeyBinding, KeyCode>()
         {
@@ -56,6 +66,8 @@ public class KeyboardInput : MonoBehaviour
         viewTowerComplex();
         viewFort();
         viewCastle();
+        repairBuilding();
+        repairAllBuildings();
     }
 
     private void viewWoodenOutpost()
@@ -92,5 +104,24 @@ public class KeyboardInput : MonoBehaviour
     {
         if (Input.GetKeyUp(_castleKey))
             Debug.Log("View castle");
+    }
+
+    private void repairBuilding()
+    {
+        if (Input.GetKeyUp(_buildingRepairKey))
+        {
+            Building building = _interactableManager.GetCurrentInteractableObject()?.GetComponent<Building>();
+            building?.Repair();
+        }
+    }
+
+    private void repairAllBuildings()
+    {
+        if (Input.GetKey(_allEqualActionKey) && Input.GetKeyUp(_buildingRepairKey))
+        {
+            Debug.Log("Repair all buildings");
+            foreach (Transform transform in BuildingsContainer.GetContainer())
+                transform.GetComponent<Building>()?.Repair();
+        }
     }
 }

@@ -18,28 +18,22 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
     [SerializeField] private List<Transform> _checkpoints = new List<Transform>();
 
     [SerializeField] private Transform _checkpointPrefab;
-
-    private IEnemySpawner _enemySpawner;
+    private Transform _checkpointsContainer;
 
     private void Awake()
     {
         _instance = this;
     }
 
-    private void Start()
-    {
-        _enemySpawner = EnemySpawner.Instance;
-
-        generateCheckpoints();
-    }
-
-    private void generateCheckpoints()
+    public void GenerateCheckpoints()
     {
         clearCheckpoints();
 
         int spawnSide = Utilities.ChanceFunc(50) ? 1 : -1;
         _spawnPoint.position = Utilities.GetRandomXBoundaryPosition(1.0f, +spawnSide);
         _exitPoint.position = Utilities.GetRandomXBoundaryPosition(1.0f, -spawnSide);
+
+        _checkpointsContainer = CheckpointsContainer.GetContainer();
 
         int numberOfCheckpoints = 10;
         float viewAngle = 45;
@@ -67,11 +61,9 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
                 continue;
             }
             
-            tempTransform = Instantiate(_checkpointPrefab, newPosition, Quaternion.identity, null);
+            tempTransform = Instantiate(_checkpointPrefab, newPosition, Quaternion.identity, _checkpointsContainer);
             _checkpoints.Add(tempTransform);
         }
-
-        _enemySpawner.StartSpawning(true);
     }
 
     private void clearCheckpoints()
@@ -80,9 +72,7 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
             return;
 
         foreach (Transform checkpoint in _checkpoints)
-        {
             Destroy(checkpoint.gameObject);
-        }
 
         _checkpoints.Clear();
     }

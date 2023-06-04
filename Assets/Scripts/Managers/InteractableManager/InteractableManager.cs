@@ -13,12 +13,12 @@ public class InteractableManager : MonoBehaviour, IInteractableManager
 
     private InteractableObject _currentInteractableObject;
     private ISelectionSprite _selectionSprite;
-
+    
     private void Awake()
     {
         _instance = this;
     }
-
+    
     private void Start()
     {
         _selectionSprite = SelectionSprite.Instance;
@@ -42,5 +42,10 @@ public class InteractableManager : MonoBehaviour, IInteractableManager
         _currentInteractableObject.StopInteracting();
         _currentInteractableObject = null;
         _selectionSprite.ResetSelection();
+    }
+
+    public InteractableObject GetCurrentInteractableObject()
+    {
+        return _currentInteractableObject;
     }
 }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae085530c4b822140a355cba047814f4, type: 3}
-  m_Name: WoodenTower
+  m_Name: L2WoodenTower
   m_EditorClassIdentifier: 
   Name: Wooden Tower
   Building: 1
@@ -25,3 +25,4 @@ MonoBehaviour:
   ShootingRate: 0.6
   Range: 3
   ResistDamage: 0.05
+  ChanceToKillCrewMember: 9

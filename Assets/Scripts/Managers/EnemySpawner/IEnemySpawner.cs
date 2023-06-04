@@ -6,12 +6,13 @@ using UnityEngine;
 /// </summary>
 public interface IEnemySpawner
 {
+    void SetupSpawner(LevelSettings levelSettings);
+
     /// <summary>
     /// Spawn a number of <see cref="Enemy"/> objects
     /// </summary>
     /// <param name="enemyNumber"></param>
-    /// <param name="enemyTemplates"></param>
-    void SpawnEnemyWave(int enemyNumber = 5, List<EnemyTemplate> enemyTemplates = null);
+    void SpawnEnemyWave(int enemyNumber = 5);
 
     /// <summary>
     /// Spawn one <see cref="Enemy"/> by <see cref="EnemyTemplate"/>

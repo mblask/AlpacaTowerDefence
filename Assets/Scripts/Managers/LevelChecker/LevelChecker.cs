@@ -20,9 +20,16 @@ public class LevelChecker : MonoBehaviour, ILevelChecker
     private List<Transform> _lastEnemyWave;
     private bool _lastWaveSpawned = false;
 
+    private ILevelManager _levelManager;
+    
     private void Awake()
     {
         _instance = this;
+    }
+    
+    private void Start()
+    {
+        _levelManager = LevelManager.Instance;
     }
 
     public void RemoveEnemy(Transform enemyTransform)
@@ -33,7 +40,10 @@ public class LevelChecker : MonoBehaviour, ILevelChecker
         _lastEnemyWave.Remove(enemyTransform);
 
         if (_lastEnemyWave.Count == 0)
+        {
             Debug.Log("Level finished");
+            _levelManager.Setup();
+        }
     }
 
     public void SetLastWaveSpawned(List<Transform> lastWaveSpawned)

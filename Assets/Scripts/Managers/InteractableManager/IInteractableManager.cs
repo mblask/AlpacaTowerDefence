@@ -13,4 +13,10 @@ public interface IInteractableManager
     /// Resets the current <see cref="InteractableObject"/>
     /// </summary>
     void ResetInteractable();
+
+    /// <summary>
+    /// Retrieves the current <see cref="InteractableObject"/>
+    /// </summary>
+    /// <returns><see cref="InteractableObject"/></returns>
+    InteractableObject GetCurrentInteractableObject();
 }

@@ -14,15 +14,11 @@ public class SelectionSprite : MonoBehaviour, ISelectionSprite
     private bool _isActive = false;
 
     private SpriteRenderer _spriteRenderer;
-
+    
     private void Awake()
     {
         _instance = this;
         _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    private void Start()
-    {
         _spriteRenderer.enabled = _isActive;
     }
 
@@ -36,6 +32,8 @@ public class SelectionSprite : MonoBehaviour, ISelectionSprite
     public void ResetSelection()
     {
         _isActive = false;
-        _spriteRenderer.enabled = false;
+
+        if (_spriteRenderer != null)
+            _spriteRenderer.enabled = false;
     }
 }

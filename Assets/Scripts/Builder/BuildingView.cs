@@ -17,15 +17,16 @@ public class BuildingView : MonoBehaviour, IBuildingView
 
     private bool _isActive = false;
     private bool _canBuild = true;
+    private Vector2 _checkSurroundingBox;
     private BuildingTemplate _buildingTemplate;
 
     private IBuilder _builder;
-    private float _checkSurroundingsRadius = 0.75f;
-
+    
     private void Awake()
     {
         _instance = this;
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _checkSurroundingBox = new Vector2(0.9f, 0.9f);
     }
 
     private void Start()
@@ -79,17 +80,15 @@ public class BuildingView : MonoBehaviour, IBuildingView
 
     private void checkSurroundings()
     {
-        if (!_isActive)
-            return;
-
         _canBuild = true;
         Collider2D[] colliders = Physics2D
-            .OverlapCircleAll(transform.position + new Vector3(0.0f, transform.localScale.y / 2, 0.0f), _checkSurroundingsRadius);
+            .OverlapBoxAll(transform.position + new Vector3(0.0f, transform.localScale.y / 2, 0.0f), _checkSurroundingBox, 0.0f);
         foreach (Collider2D collider in colliders)
         {
             ObstacleBase obstacle = collider.GetComponent<ObstacleBase>();
             Checkpoint checkpoint = collider.GetComponent<Checkpoint>();
-            if (obstacle != null || checkpoint != null)
+            Building building = collider.GetComponent<Building>();
+            if (obstacle != null || checkpoint != null || building != null)
             {
                 _canBuild = false;
                 _spriteRenderer.color = new Color(1.0f, 0.0f, 0.0f, _defaultColor.a);
@@ -110,5 +109,10 @@ public class BuildingView : MonoBehaviour, IBuildingView
 
         Vector3 position = Utilities.GetMouseWorldLocation();
         _builder.Build(_buildingTemplate, position);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position + new Vector3(0.0f, transform.localScale.y / 2, 0.0f), _checkSurroundingBox);
     }
 }

@@ -1,5 +1,6 @@
 using AlpacaMyGames;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -179,12 +180,14 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private void checkForBuildingsInRange()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _range).Where(collider => collider.GetComponent<Building>() != null).ToArray();
+        List<Collider2D> colliders = Physics2D.OverlapCircleAll(transform.position, _range)
+            .Where(collider => collider.GetComponent<Building>() != null)
+            .ToList();
 
-        if (colliders.Length == 0)
+        if (colliders.Count == 0)
             return;
 
-        Building building = colliders[UnityEngine.Random.Range(0, colliders.Length - 1)].GetComponent<Building>();
+        Building building = colliders.GetRandomElement().GetComponent<Building>();
         if (building == null)
             return;
 
@@ -193,7 +196,12 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private void attackBuilding(Building building)
     {
-        Torch torch = Instantiate(_gameAssets.Torch, transform.position, Quaternion.identity, null).GetComponent<Torch>();
+        ITorch torch = Instantiate(_gameAssets.Torch, transform.position, Quaternion.identity, null).GetComponent<ITorch>();
         torch.SetupTorch(building);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, _range);
     }
 }
