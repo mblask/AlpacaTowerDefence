@@ -17,7 +17,7 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
     [SerializeField] private Transform _exitPoint;
     [SerializeField] private List<Transform> _checkpoints = new List<Transform>();
 
-    [SerializeField] private Transform _checkpointPrefab;
+    private GameAssets _gameAssets;
     private Transform _checkpointsContainer;
 
     private void Awake()
@@ -34,6 +34,9 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
         _exitPoint.position = Utilities.GetRandomXBoundaryPosition(1.0f, -spawnSide);
 
         _checkpointsContainer = CheckpointsContainer.GetContainer();
+
+        if (_gameAssets == null)
+            _gameAssets = GameAssets.Instance;
 
         int numberOfCheckpoints = 10;
         float viewAngle = 45;
@@ -61,7 +64,7 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
                 continue;
             }
             
-            tempTransform = Instantiate(_checkpointPrefab, newPosition, Quaternion.identity, _checkpointsContainer);
+            tempTransform = Instantiate(_gameAssets.CheckpointPrefab, newPosition, Quaternion.identity, _checkpointsContainer);
             _checkpoints.Add(tempTransform);
         }
     }

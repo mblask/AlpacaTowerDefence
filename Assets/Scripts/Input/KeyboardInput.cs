@@ -1,10 +1,4 @@
-using AlpacaMyGames;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.Threading;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class KeyboardInput : MonoBehaviour
@@ -17,8 +11,6 @@ public class KeyboardInput : MonoBehaviour
             return _instance;
         }
     }
-
-    private Dictionary<KeyBinding, KeyCode> _keyBindingDictionary;
 
     [Header("Building keys")]
     [SerializeField] private KeyCode _woodenOutpostKey;
@@ -34,7 +26,13 @@ public class KeyboardInput : MonoBehaviour
     [Header("Building action keys")]
     [SerializeField] private KeyCode _buildingRepairKey;
 
+    [Header("Building upgrades")]
+    [SerializeField] private KeyCode _towerArmorUpgradeKey;
+    [SerializeField] private KeyCode _towerConstructionUpgradeKey;
+    [SerializeField] private KeyCode _towerCrewUpgradeKey;
+
     private IBuildingManager _buildingManager;
+    private IBuildingUpgradeManager _buildingUpgradeManager;
     private IInteractableManager _interactableManager;
 
     private void Awake()
@@ -45,17 +43,8 @@ public class KeyboardInput : MonoBehaviour
     private void Start()
     {
         _buildingManager = BuildingManager.Instance;
+        _buildingUpgradeManager = BuildingUpgradeManager.Instance;
         _interactableManager = InteractableManager.Instance;
-
-        _keyBindingDictionary = new Dictionary<KeyBinding, KeyCode>()
-        {
-            { KeyBinding.WoodenOutpost, _woodenOutpostKey },
-            { KeyBinding.WoodenTower, _woodenTowerKey },
-            { KeyBinding.StoneTower, _stoneTowerKey },
-            { KeyBinding.TowerComplex, _towerComplexKey },
-            { KeyBinding.Fort, _fortKey },
-            { KeyBinding.Castle, _castleKey }
-        };
     }
 
     private void Update()
@@ -68,6 +57,9 @@ public class KeyboardInput : MonoBehaviour
         viewCastle();
         repairBuilding();
         repairAllBuildings();
+        towerArmorUpgrade();
+        towerConstructionUpgrade();
+        towerCrewUpgrade();
     }
 
     private void viewWoodenOutpost()
@@ -123,5 +115,23 @@ public class KeyboardInput : MonoBehaviour
             foreach (Transform transform in BuildingsContainer.GetContainer())
                 transform.GetComponent<Building>()?.Repair();
         }
+    }
+
+    private void towerArmorUpgrade()
+    {
+        if (Input.GetKeyUp(_towerArmorUpgradeKey))
+            _buildingUpgradeManager.TowerArmorUpgrade();
+    }
+
+    private void towerConstructionUpgrade()
+    {
+        if (Input.GetKeyUp(_towerConstructionUpgradeKey))
+            _buildingUpgradeManager.TowerConstructionUpgrade();
+    }
+
+    private void towerCrewUpgrade()
+    {
+        if (Input.GetKeyUp(_towerCrewUpgradeKey))
+            _buildingUpgradeManager.TowerCrewUpgrade();
     }
 }

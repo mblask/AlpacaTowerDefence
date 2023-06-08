@@ -164,7 +164,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &182662475
 GameObject:
@@ -295,6 +295,7 @@ MonoBehaviour:
   Enemy: {fileID: 8515429719167282671, guid: b65cd8ea0dea44c4aa1ebf25f4b73d49, type: 3}
   Canonball: {fileID: 2788675210573203231, guid: 0812b3d4f371e9441a1149e512793cf6, type: 3}
   DestructionArea: {fileID: 6223586052196916371, guid: c8d36e49fd194214c992b2de9e30512a, type: 3}
+  CheckpointPrefab: {fileID: 2738569333470577060, guid: c7f36bfc8e0d87c4bb634e99f00f2a7f, type: 3}
   CheckpointFlag: {fileID: 374296984899302677, guid: 2a5d2859374d6674f9d71fb065f79ca8, type: 3}
   Torch: {fileID: 5509023512338392638, guid: 290ca8436fa4a3c49b64bbd053520da5, type: 3}
   Bush: {fileID: 1087217313219454370, guid: 146e3b5722ebb0b4984a7cf4cae477a6, type: 3}
@@ -348,7 +349,7 @@ Transform:
   - {fileID: 1821678225}
   - {fileID: 1913263313}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &325920448
 MonoBehaviour:
@@ -391,7 +392,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &351967682
 MonoBehaviour:
@@ -563,7 +564,7 @@ Transform:
   - {fileID: 182662476}
   - {fileID: 1388631889}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &526206053
 MonoBehaviour:
@@ -618,7 +619,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &662183102
 GameObject:
@@ -691,7 +692,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &684713813
 GameObject:
@@ -721,7 +722,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &734670405
 GameObject:
@@ -766,7 +767,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &734670408
 Rigidbody2D:
@@ -898,7 +899,7 @@ RectTransform:
   m_Children:
   - {fileID: 1919959593}
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -985,6 +986,9 @@ MonoBehaviour:
   _castleKey: 54
   _allEqualActionKey: 306
   _buildingRepairKey: 114
+  _towerArmorUpgradeKey: 113
+  _towerConstructionUpgradeKey: 119
+  _towerCrewUpgradeKey: 101
 --- !u!4 &988800416
 Transform:
   m_ObjectHideFlags: 0
@@ -997,7 +1001,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1113590917
 GameObject:
@@ -1089,7 +1093,7 @@ Transform:
   m_Children:
   - {fileID: 984132140}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1388631888
 GameObject:
@@ -1176,6 +1180,65 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 198268195}
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1522280700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1522280702}
+  - component: {fileID: 1522280701}
+  m_Layer: 0
+  m_Name: BuildingUpgradeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1522280701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522280700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2382efc72750e4c9ab5fed0fdd3ae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TowerUpgrades:
+    DamageResistModifier:
+      Level: 0
+      Value: 0
+    HealthModifier:
+      Level: 0
+      Value: 0
+    CrewModifier:
+      Level: 0
+      Value: 0
+    ShootingRateModifier:
+      Level: 0
+      Value: 0
+    BaseRepairModifier:
+      Level: 0
+      Value: 0
+--- !u!4 &1522280702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522280700}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1267,7 +1330,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1848095108
 GameObject:
@@ -1312,7 +1375,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1913263312
 GameObject:
@@ -1439,7 +1502,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2031109539
 MonoBehaviour:
@@ -1485,7 +1548,6 @@ MonoBehaviour:
   _spawnPoint: {fileID: 182662476}
   _exitPoint: {fileID: 1388631889}
   _checkpoints: []
-  _checkpointPrefab: {fileID: 2738569333470577060, guid: c7f36bfc8e0d87c4bb634e99f00f2a7f, type: 3}
 --- !u!4 &2065819083
 Transform:
   m_ObjectHideFlags: 0
@@ -1581,7 +1643,7 @@ Transform:
   m_LocalScale: {x: 1.2, y: 0.7, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2086375916
 MonoBehaviour:
@@ -1676,7 +1738,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8755210541330485073
 MonoBehaviour:

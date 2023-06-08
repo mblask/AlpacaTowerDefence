@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Tower : Building, ITower
 {
+    private SpriteRenderer _spriteRenderer;
     private Transform _shootingSpotTransform;
     private Transform _towerRadiusMarker;
 
@@ -9,17 +10,17 @@ public class Tower : Building, ITower
     {
         get 
         { 
-            return _towerHandler.Health; 
+            return _towerHandler.CurrentStats.Health; 
         }
     }
 
     private bool _isActive = true;
 
-    [Header("Read-only")]
-    [SerializeField] private ITowerHandler _towerHandler;
+    [SerializeField] private TowerHandler _towerHandler;
 
     private void Awake()
     {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _shootingSpotTransform = transform.Find("ShootingSpot");
         _towerRadiusMarker = transform.Find("TowerRadiusMarker");
     }
@@ -27,6 +28,7 @@ public class Tower : Building, ITower
     public void SetupTower(TowerTemplate towerTemplate)
     {
         name = towerTemplate.Name;
+        _spriteRenderer.color = towerTemplate.Color;
         _towerHandler = new TowerHandler(towerTemplate, transform, _shootingSpotTransform);
 
         Vector3 scale = new Vector3(towerTemplate.Range, towerTemplate.Range, 0.0f) * 2.0f;
@@ -48,10 +50,10 @@ public class Tower : Building, ITower
     {
         _towerHandler.Damage(damage);
 
-        if (_towerHandler.CrewMembers == 0)
+        if (_towerHandler.CurrentStats.CrewNumber == 0)
             _isActive = false;
 
-        if (_towerHandler.Health < 0.0f)
+        if (_towerHandler.CurrentStats.Health < 0.0f)
             Ruin();
     }
 
@@ -63,6 +65,11 @@ public class Tower : Building, ITower
     public void Ruin()
     {
         Destroy(gameObject);
+    }
+
+    public void UpdateStats()
+    {
+        _towerHandler.UpdateStats();
     }
 
     public override void Interact()

@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private bool _isActive = true;
 
-    [SerializeField] private IEnemyHandler _enemyHandler;
+    [SerializeField] private EnemyHandler _enemyHandler;
 
     private void Awake()
     {

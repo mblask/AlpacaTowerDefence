@@ -5,69 +5,51 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class TowerHandler : ITowerHandler
+public class TowerHandler
 {
     private Transform _towerTransform;
     private Transform _shootingSpotTransform;
 
     private List<Transform> _enemiesInSight = new List<Transform>();
 
-    private TowerTemplate _template;
+    private TowerTemplate _towerTemplate;
+    private TowerStats _initialStats;
+    [field: SerializeField] public TowerStats CurrentStats { get; set; }
     private bool _isRepairing = false;
-    [field: SerializeField] public float Health { get; set; }
-    private float _shootingRate;
-    private float _shootingPrecision;
-    private float _range;
-    private float _baseRepair;
-    [field: SerializeField] public int CrewMembers { get; set; }
-    [field: SerializeField] public float ResistDamage { get; set; }
-    private Vector2 _damage;
 
-    private float _checkEnemyRate;
     private float _enemyCheckingTimer = 0.0f;
     private float _timer = 0.0f;
 
-    [field: SerializeField] public float ChanceToKillCrewMember { get; set; }
-
-    private float _towerShootingRatePercentageWhileRepairing;
-
     private GameAssets _gameAssets;
+    private TowerStatsHandler _towerTemplateHandler;
 
     public TowerHandler(TowerTemplate template, Transform towerTransform, Transform shootingSpotTransform)
     {
+        _towerTemplate = template;
         _towerTransform = towerTransform;
         _shootingSpotTransform = shootingSpotTransform;
 
-        _template = template;
-        _shootingRate = template.ShootingRate;
-        _shootingPrecision = template.Precision;
-        _range = template.Range;
-        _baseRepair = template.BaseRepair;
-        _damage = template.Damage;
+        _towerTemplateHandler = new TowerStatsHandler();
 
-        _checkEnemyRate = template.EnemyCheckRate;
-        _towerShootingRatePercentageWhileRepairing = template.ShootingRatePercentageWhileRepairing;
-
-        Health = template.Health;
-        CrewMembers = template.CrewNumber;
-        ResistDamage = template.ResistDamage;
-        ChanceToKillCrewMember = template.ChanceToKillCrewMember;
+        _initialStats = _towerTemplateHandler.GetFinalStats(template);
+        CurrentStats = new TowerStats(_initialStats);
 
         _gameAssets = GameAssets.Instance;
     }
 
     public void Damage(float damage)
     {
-        Health -= damage * (1 - ResistDamage / 100);
+        CurrentStats.Health -= damage * (1 - CurrentStats.ResistDamage / 100);
 
-        if (Utilities.ChanceFunc(ChanceToKillCrewMember))
-            CrewMembers--;
+        if (Utilities.ChanceFunc(CurrentStats.ChanceToKillCrewMember))
+            CurrentStats.CrewNumber--;
     }
 
     public void ToggleRepairs()
     {
         _isRepairing = !_isRepairing;
-        _shootingRate = _isRepairing ? _shootingRate * _towerShootingRatePercentageWhileRepairing : _template.ShootingRate;
+        CurrentStats.ShootingRate = _isRepairing ? 
+            _initialStats.ShootingRate * _initialStats.ShootingRatePercentageWhileRepairing : _initialStats.ShootingRate;
     }
 
     public void RepairProcedure()
@@ -75,14 +57,14 @@ public class TowerHandler : ITowerHandler
         if (!_isRepairing)
             return;
 
-        if (Health >= _template.Health)
+        if (CurrentStats.Health > _initialStats.Health)
         {
-            _shootingRate = _template.ShootingRate;
+            CurrentStats.ShootingRate = _initialStats.ShootingRate;
             _isRepairing = false;
             return;
         }
 
-        Health += _baseRepair * CrewMembers * Time.deltaTime;
+        CurrentStats.Health += _initialStats.BaseRepair * CurrentStats.CrewNumber * Time.deltaTime;
     }
 
     public void ShootingProcedure()
@@ -92,7 +74,7 @@ public class TowerHandler : ITowerHandler
 
         _timer += Time.deltaTime;
 
-        if (_timer < _shootingRate)
+        if (_timer < CurrentStats.ShootingRate)
             return;
 
         _timer = 0.0f;
@@ -107,9 +89,9 @@ public class TowerHandler : ITowerHandler
         if (randomTransform != null)
         {
             ICanonball canonball = UnityEngine.Object.Instantiate(_gameAssets.Canonball, _shootingSpotTransform.position, Quaternion.identity, null).GetComponent<ICanonball>();
-            Vector2 targetPosition = (Vector2)randomTransform.position + Utilities.GetRandomVector2(_shootingPrecision);
+            Vector2 targetPosition = (Vector2)randomTransform.position + Utilities.GetRandomVector2(CurrentStats.Precision);
 
-            canonball.SetupCanonball(targetPosition, _damage);
+            canonball.SetupCanonball(targetPosition, CurrentStats.Damage);
         }
     }
 
@@ -117,11 +99,12 @@ public class TowerHandler : ITowerHandler
     {
         _enemyCheckingTimer += Time.deltaTime;
 
-        if (_enemyCheckingTimer < _checkEnemyRate)
+        if (_enemyCheckingTimer < CurrentStats.EnemyCheckRate)
             return;
+
         _enemyCheckingTimer = 0.0f;
 
-        List<Transform> colliders = Physics2D.OverlapCircleAll(_towerTransform.position, _range)
+        List<Transform> colliders = Physics2D.OverlapCircleAll(_towerTransform.position, CurrentStats.Range)
             .Where(collider => collider.GetComponent<Enemy>() != null)
             .Select(collider => collider.transform).ToList();
 
@@ -139,5 +122,13 @@ public class TowerHandler : ITowerHandler
                 i--;
             }
         }
+    }
+
+    public void UpdateStats()
+    {
+        _initialStats = _towerTemplateHandler.GetFinalStats(_towerTemplate);
+        TowerStats statDifference = _towerTemplateHandler.GetTowerStatDifference(_towerTemplate);
+
+        CurrentStats += statDifference;
     }
 }

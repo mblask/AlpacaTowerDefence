@@ -42,6 +42,11 @@ public class LevelChecker : MonoBehaviour, ILevelChecker
         if (_lastEnemyWave.Count == 0)
         {
             Debug.Log("Level finished");
+
+            _lastWaveSpawned = false;
+            _lastEnemyWave = new List<Transform>();
+            _enemiesSpawned = 0;
+            _enemiesSurvived = 0;
             _levelManager.Setup();
         }
     }

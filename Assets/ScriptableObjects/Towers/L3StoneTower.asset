@@ -26,5 +26,5 @@ MonoBehaviour:
   ShootingRate: 1
   ShootingRatePercentageWhileRepairing: 0.75
   Range: 3
-  ResistDamage: 0.1
+  ResistDamage: 10
   ChanceToKillCrewMember: 7
