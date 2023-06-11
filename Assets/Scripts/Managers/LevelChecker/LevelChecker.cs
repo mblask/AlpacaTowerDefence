@@ -20,6 +20,8 @@ public class LevelChecker : MonoBehaviour, ILevelChecker
     private List<Transform> _lastEnemyWave;
     private bool _lastWaveSpawned = false;
 
+    private EnemyContainer _enemyContainer;
+
     private ILevelManager _levelManager;
     
     private void Awake()
@@ -30,6 +32,7 @@ public class LevelChecker : MonoBehaviour, ILevelChecker
     private void Start()
     {
         _levelManager = LevelManager.Instance;
+        _enemyContainer = EnemyContainer.GetInstance();
     }
 
     public void RemoveEnemy(Transform enemyTransform)
@@ -45,6 +48,9 @@ public class LevelChecker : MonoBehaviour, ILevelChecker
 
             _lastWaveSpawned = false;
             _lastEnemyWave = new List<Transform>();
+
+            _enemyContainer.ClearContainer();
+
             _enemiesSpawned = 0;
             _enemiesSurvived = 0;
             _levelManager.Setup();

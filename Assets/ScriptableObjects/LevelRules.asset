@@ -18,9 +18,11 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 5a33edf377903f54bbef6a0c5a65d5ad, type: 2}
     - {fileID: 11400000, guid: 8a8d33a13b64c514fabf9c16da27fa8d, type: 2}
     EnemyWaves: 3
+    EnemyBehaviour: 2
   - EnvironmentType: 1
     Enemies:
     - {fileID: 11400000, guid: 5a33edf377903f54bbef6a0c5a65d5ad, type: 2}
     - {fileID: 11400000, guid: 8a8d33a13b64c514fabf9c16da27fa8d, type: 2}
     - {fileID: 11400000, guid: 008191401498b4e499e86d603b0c976c, type: 2}
     EnemyWaves: 4
+    EnemyBehaviour: 2

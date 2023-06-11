@@ -33,6 +33,7 @@ public class KeyboardInput : MonoBehaviour
 
     private IBuildingManager _buildingManager;
     private IBuildingUpgradeManager _buildingUpgradeManager;
+    private BuildingsContainer _buildingsContainer;
     private IInteractableManager _interactableManager;
 
     private void Awake()
@@ -44,6 +45,7 @@ public class KeyboardInput : MonoBehaviour
     {
         _buildingManager = BuildingManager.Instance;
         _buildingUpgradeManager = BuildingUpgradeManager.Instance;
+        _buildingsContainer = BuildingsContainer.GetInstance();
         _interactableManager = InteractableManager.Instance;
     }
 
@@ -112,7 +114,7 @@ public class KeyboardInput : MonoBehaviour
         if (Input.GetKey(_allEqualActionKey) && Input.GetKeyUp(_buildingRepairKey))
         {
             Debug.Log("Repair all buildings");
-            foreach (Transform transform in BuildingsContainer.GetContainer())
+            foreach (Transform transform in _buildingsContainer.GetContainer())
                 transform.GetComponent<Building>()?.Repair();
         }
     }

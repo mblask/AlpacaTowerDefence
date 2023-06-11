@@ -1,26 +1,47 @@
 using UnityEngine;
 
-public class EnvironmentContainer : MonoBehaviour
+public class EnvironmentContainer : Container
 {
     private static EnvironmentContainer _instance;
+
+    private Transform _pathPieces;
+    private Transform _naturePieces;
 
     private void Awake()
     {
         _instance = this;
+        _pathPieces = transform.Find("PathPieces");
+        _naturePieces = transform.Find("NaturePieces");
     }
 
-    public static Transform GetTransform()
+    public static EnvironmentContainer GetInstance()
     {
-        return _instance.transform;
+        return _instance;
     }
 
-    public static Transform GetPathPiecesTransform()
+    public override Transform GetContainer()
     {
-        return _instance.transform.Find("PathPieces");
+        return transform;
     }
 
-    public static Transform GetNaturePiecesTransform()
+    public Transform GetPathContainer()
     {
-        return _instance.transform.Find("NaturePieces");
+        return _pathPieces;
+    }
+
+    public Transform GetNatureContainer()
+    {
+        return _naturePieces;
+    }
+
+    public override void ClearContainer()
+    {
+        foreach (Transform child in _naturePieces)
+            if (child != null)
+                Destroy(child.gameObject);
+
+        foreach (Transform child in _pathPieces)
+            if (child != null)
+                Destroy(child.gameObject);
     }
 }

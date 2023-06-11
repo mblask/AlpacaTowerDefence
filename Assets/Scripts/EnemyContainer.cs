@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class BuildingsContainer : Container
+public class EnemyContainer : Container
 {
-    private static BuildingsContainer _instance;
+    public static EnemyContainer _instance;
 
     private void Awake()
     {
         _instance = this;
     }
 
-    public static BuildingsContainer GetInstance()
+    public static EnemyContainer GetInstance()
     {
         return _instance;
     }

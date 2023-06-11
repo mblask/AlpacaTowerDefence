@@ -12,6 +12,7 @@ public class Builder : MonoBehaviour, IBuilder
     }
 
     private GameAssets _gameAssets;
+    private BuildingsContainer _buildingsContainer;
     private IResourcesManager _resourcesManager;
 
     private void Awake()
@@ -22,6 +23,7 @@ public class Builder : MonoBehaviour, IBuilder
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _buildingsContainer = BuildingsContainer.GetInstance();
         _resourcesManager = ResourcesManager.Instance;
     }
 
@@ -42,7 +44,7 @@ public class Builder : MonoBehaviour, IBuilder
 
     private void buildTower(TowerTemplate towerTemplate, Vector3 position)
     {
-        ITower tower = Instantiate(_gameAssets.Tower, position, Quaternion.identity, BuildingsContainer.GetContainer()).GetComponent<ITower>();
+        ITower tower = Instantiate(_gameAssets.Tower, position, Quaternion.identity, _buildingsContainer.GetContainer()).GetComponent<ITower>();
         tower.SetupTower(towerTemplate);
         _resourcesManager.UpdateGold(-towerTemplate.Cost);
     }

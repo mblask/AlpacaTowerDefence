@@ -55,7 +55,7 @@ public class BuildingUpgradeManager : MonoBehaviour, IBuildingUpgradeManager
 
     private void UpdateTowers()
     {
-        Transform buildingContainer = BuildingsContainer.GetContainer();
+        Transform buildingContainer = BuildingsContainer.GetInstance().GetContainer();
         foreach (Transform transform in buildingContainer)
         {
             Tower tower = transform.GetComponent<Tower>();

@@ -13,7 +13,7 @@ public class Checkpoint : MonoBehaviour
             return;
 
         _gameAssets = GameAssets.Instance;
-        _environment = EnvironmentContainer.GetNaturePiecesTransform();
+        _environment = EnvironmentContainer.GetInstance().GetNatureContainer();
         Instantiate(_gameAssets.CheckpointFlag, transform.position, Quaternion.identity, _environment);
     }
 }

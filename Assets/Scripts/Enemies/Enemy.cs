@@ -16,12 +16,11 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private void Update()
     {
-        _enemyHandler.Move();
         _enemyHandler.LayPath();
-        _enemyHandler.BuildingSearchProcedure();
+        _enemyHandler.HandleBehaviour();
     }
 
-    public void SetupEnemy(EnemyTemplate enemyTemplate)
+    public IEnemy SetupEnemy(EnemyTemplate enemyTemplate)
     {
         _isActive = enemyTemplate.IsActive;
         name = enemyTemplate.Name;
@@ -29,6 +28,19 @@ public class Enemy : MonoBehaviour, IEnemy
         _spriteRenderer.color = enemyTemplate.Color;
 
         _enemyHandler = new EnemyHandler(enemyTemplate, transform);
+
+        return this;
+    }
+
+    public IEnemy SetEnemyBehaviour(EnemyBehaviour enemyBehaviour)
+    {
+        _enemyHandler.SetBehaviour(enemyBehaviour);
+        return this;
+    }
+
+    public void SetCheckpointGroup(int checkpointGroup)
+    {
+        _enemyHandler.SetCheckpointGroup(checkpointGroup);
     }
 
     public void Damage(float value)
@@ -36,7 +48,7 @@ public class Enemy : MonoBehaviour, IEnemy
         shake();
         _enemyHandler.Damage(value);
 
-        if (_enemyHandler.Health <= 0.0f)
+        if (_enemyHandler.CurrentStats.Health <= 0.0f)
             Die();
     }
 
@@ -72,28 +84,6 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(transform.position, _enemyHandler.Range);
-    }
-}
-
-public class CoroutineCollection
-{
-    public IEnumerator ShakeCoroutine(Transform transform)
-    {
-        float magnitude = 5.0f;
-        float timer = 0.0f;
-        float duration = 0.2f;
-        Quaternion defaultRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-
-        while (timer <= duration)
-        {
-            float angle = UnityEngine.Random.Range(-magnitude, magnitude);
-            transform.Rotate(new Vector3(0.0f, 0.0f, angle));
-
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.rotation = defaultRotation;
+        Gizmos.DrawWireSphere(transform.position, _enemyHandler.CurrentStats.Range);
     }
 }
