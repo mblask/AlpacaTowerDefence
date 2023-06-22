@@ -10,17 +10,23 @@ public interface IEnemySpawner
     void SetupSpawner(LevelSettings levelSettings);
 
     /// <summary>
-    /// Spawn a number of <see cref="Enemy"/> objects
+    /// Spawns a number of <see cref="Enemy"/> objects
     /// </summary>
     /// <param name="enemyNumber"></param>
-    void SpawnEnemyWave(int enemyNumber = 5);
+    void SpawnWave(int enemyNumber = 5);
+
+    /// <summary>
+    /// Spawns a number of <see cref="Enemy"/> objects from different spawn points
+    /// </summary>
+    /// <param name="enemyNumber"></param>
+    void SpawnWaveMultiSpawnpoints(int enemyNumber = 5);
 
     /// <summary>
     /// Spawn one <see cref="Enemy"/> by <see cref="EnemyTemplate"/>
     /// </summary>
     /// <param name="position"></param>
     /// <param name="enemyTemplate"></param>
-    Transform SpawnEnemy(Vector3 position, EnemyTemplate enemyTemplate);
+    Transform SpawnEnemy(Vector3 position, EnemyTemplate enemyTemplate, int checkpointGroup = 0);
 
     /// <summary>
     /// Enable or disable enemy spawning

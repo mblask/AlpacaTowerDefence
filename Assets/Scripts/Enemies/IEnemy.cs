@@ -7,7 +7,19 @@ public interface IEnemy
     /// Initializes the <see cref="Enemy"/> object using <see cref="EnemyTemplate"/>
     /// </summary>
     /// <param name="enemyTemplate"></param>
-    void SetupEnemy(EnemyTemplate enemyTemplate);
+    IEnemy SetupEnemy(EnemyTemplate enemyTemplate);
+
+    /// <summary>
+    /// Sets the <see cref="EnemyBehaviour"/> of one enemy unit
+    /// </summary>
+    /// <param name="enemyBehaviour"></param>
+    IEnemy SetEnemyBehaviour(EnemyBehaviour enemyBehaviour);
+
+    /// <summary>
+    /// Sets the checkpoint group of the enemy
+    /// </summary>
+    /// <param name="checkpointGroup"></param>
+    void SetCheckpointGroup(int checkpointGroup);
 
     /// <summary>
     /// Removes <see cref="Enemy"/> object from the scene

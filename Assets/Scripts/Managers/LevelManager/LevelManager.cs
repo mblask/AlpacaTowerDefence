@@ -37,7 +37,7 @@ public class LevelManager : MonoBehaviour, ILevelManager
         LevelSettings levelSettings = _levelRules.LevelSettings.GetRandomElement();
 
         _environmentGenerator.SetupEnvironment(levelSettings.EnvironmentType);
-        _checkpointManager.GenerateCheckpoints();
+        _checkpointManager.GenerateWithMultiSpawnPoints(1);
         _enemySpawner.SetupSpawner(levelSettings);
     }
 }

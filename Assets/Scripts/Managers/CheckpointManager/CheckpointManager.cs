@@ -14,8 +14,12 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
     }
 
     [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
+
     [SerializeField] private Transform _exitPoint;
     [SerializeField] private List<Transform> _checkpoints = new List<Transform>();
+
+    private int _numberOfCheckpoints = 10;
 
     private GameAssets _gameAssets;
     private CheckpointsContainer _checkpointsContainer;
@@ -25,27 +29,79 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
         _instance = this;
     }
 
-    public void GenerateCheckpoints()
+    public void GenerateWithMultiSpawnPoints(int numberOfSpawnPoints)
     {
         clearCheckpoints();
 
+        if (_gameAssets == null)
+            _gameAssets = GameAssets.Instance;
+
+        _checkpointsContainer = CheckpointsContainer.GetContainer();
+
         int spawnSide = Utilities.ChanceFunc(50) ? 1 : -1;
-        _spawnPoint.position = Utilities.GetRandomXBoundaryPosition(1.0f, +spawnSide);
-        _exitPoint.position = Utilities.GetRandomXBoundaryPosition(1.0f, -spawnSide);
+        for (int i = 0; i < numberOfSpawnPoints; i++)
+            _spawnPoints.Add(Instantiate(_gameAssets.Spawnpoint, Utilities.GetRandomXBoundaryPosition(1.0f, +spawnSide), 
+                Quaternion.identity, _checkpointsContainer));
+
+        _exitPoint = Instantiate(_gameAssets.Exitpoint, Utilities.GetRandomXBoundaryPosition(1.0f, -spawnSide),
+            Quaternion.identity, _checkpointsContainer);
+
+        float viewAngle = 45;
+
+        foreach (Transform spawnPoint in _spawnPoints)
+        {
+            Transform tempTransform = spawnPoint;
+            float totalDistance = Vector2.Distance(_exitPoint.position, spawnPoint.position);
+            Vector2 worldMargin = new Vector2(-0.5f, -1.0f);
+            Vector2 newPosition;
+
+            for (int i = 0; i < _numberOfCheckpoints - 1; i++)
+            {
+                Vector2 direction = _exitPoint.position - tempTransform.position;
+                direction.Normalize();
+
+                float angle = Mathf.Atan2(direction.y, direction.x);
+                float randomAngle = Random.Range(-viewAngle, viewAngle) * Mathf.Deg2Rad;
+                angle += randomAngle;
+                direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+                float pieceDistance = totalDistance / (_numberOfCheckpoints * Mathf.Abs(Mathf.Cos(randomAngle)));
+                newPosition = (Vector2)tempTransform.position + direction * pieceDistance;
+
+                if (!Utilities.IsInsideWorldScreen(newPosition, worldMargin) && i != 0 && i != _numberOfCheckpoints - 1)
+                {
+                    i--;
+                    continue;
+                }
+
+                tempTransform = Instantiate(_gameAssets.CheckpointPrefab, newPosition, Quaternion.identity, _checkpointsContainer);
+                _checkpoints.Add(tempTransform);
+            }
+        }
+    }
+
+    public void GenerateCheckpoints()
+    {
+        clearCheckpoints();
 
         _checkpointsContainer = CheckpointsContainer.Instance;
 
         if (_gameAssets == null)
             _gameAssets = GameAssets.Instance;
 
-        int numberOfCheckpoints = 10;
+        int spawnSide = Utilities.ChanceFunc(50) ? 1 : -1;
+        _spawnPoint = Instantiate(_gameAssets.Spawnpoint, Utilities.GetRandomXBoundaryPosition(1.0f, +spawnSide),
+            Quaternion.identity, _checkpointsContainer);
+        _exitPoint = Instantiate(_gameAssets.Exitpoint, Utilities.GetRandomXBoundaryPosition(1.0f, -spawnSide),
+            Quaternion.identity, _checkpointsContainer);
+
         float viewAngle = 45;
         Transform tempTransform = _spawnPoint;
         float totalDistance = Vector2.Distance(_exitPoint.position, _spawnPoint.position);
         Vector2 worldMargin = new Vector2(-0.5f, -1.0f);
         Vector2 newPosition;
 
-        for (int i = 0; i < numberOfCheckpoints - 1; i++)
+        for (int i = 0; i < _numberOfCheckpoints - 1; i++)
         {
             Vector2 direction = _exitPoint.position - tempTransform.position;
             direction.Normalize();
@@ -55,10 +111,10 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
             angle += randomAngle;
             direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 
-            float pieceDistance = totalDistance / (numberOfCheckpoints * Mathf.Abs(Mathf.Cos(randomAngle)));
+            float pieceDistance = totalDistance / (_numberOfCheckpoints * Mathf.Abs(Mathf.Cos(randomAngle)));
             newPosition = (Vector2)tempTransform.position + direction * pieceDistance;
 
-            if (!Utilities.IsInsideWorldScreen(newPosition, worldMargin) && i != 0 && i != numberOfCheckpoints - 1)
+            if (!Utilities.IsInsideWorldScreen(newPosition, worldMargin) && i != 0 && i != _numberOfCheckpoints - 1)
             {
                 i--;
                 continue;
@@ -72,11 +128,24 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
 
     private void clearCheckpoints()
     {
+        if (_spawnPoint != null)
+            Destroy(_spawnPoint.gameObject);
+
+        foreach (Transform spawnPoint in _spawnPoints)
+            if (spawnPoint != null)
+                Destroy(spawnPoint.gameObject);
+
+        _spawnPoints.Clear();
+
+        if (_exitPoint != null)
+            Destroy(_exitPoint.gameObject);
+
         if (_checkpoints.Count == 0)
             return;
 
         foreach (Transform checkpoint in _checkpoints)
-            Destroy(checkpoint.gameObject);
+            if (checkpoint != null)
+                Destroy(checkpoint.gameObject);
 
         _checkpoints.Clear();
     }
@@ -84,6 +153,11 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
     public Transform GetSpawnPoint()
     {
         return _spawnPoint;
+    }
+
+    public List<Transform> GetSpawnPoints()
+    {
+        return _spawnPoints;
     }
 
     public Transform GetNextWaypoint(Transform currentWaypoint = null)
@@ -97,6 +171,22 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
         int index = _checkpoints.IndexOf(currentWaypoint);
 
         if (index != _checkpoints.Count - 1)
+            return _checkpoints[index + 1];
+        else
+            return _exitPoint;
+    }
+
+    public Transform GetNextWaypointMultiple(int groupNumber, Transform currentWaypoint = null)
+    {
+        if (currentWaypoint == null)
+            return _checkpoints[_numberOfCheckpoints * groupNumber];
+
+        if (currentWaypoint == _exitPoint)
+            return _exitPoint;
+
+        int index = _checkpoints.IndexOf(currentWaypoint);
+
+        if (index != (groupNumber + 1) * (_numberOfCheckpoints - 1) - 1)
             return _checkpoints[index + 1];
         else
             return _exitPoint;

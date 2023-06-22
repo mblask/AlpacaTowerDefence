@@ -10,7 +10,8 @@ public class EnemyTemplate : ScriptableObject
     public float Health;
     public float MovingSpeed;
     public float Range;
-    public float TowerSearchTimeInterval;
+    public float BuildingSearchInterval;
+    public float BuildingAttackInterval;
     public Vector2Int GoldDrop;
     public Vector2Int WoodDrop;
     public Vector2Int MetalDrop;

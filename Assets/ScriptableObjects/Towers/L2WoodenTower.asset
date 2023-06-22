@@ -20,7 +20,7 @@ MonoBehaviour:
   Cost: 80
   Health: 80
   CrewNumber: 3
-  BaseRepair: 1
+  BaseRepair: 0.6
   Damage: {x: 2.2, y: 4.5}
   EnemyCheckRate: 0.1
   Precision: 0.7

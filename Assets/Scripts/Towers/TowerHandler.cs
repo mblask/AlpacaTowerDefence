@@ -21,7 +21,7 @@ public class TowerHandler
     private float _timer = 0.0f;
 
     private GameAssets _gameAssets;
-    private TowerStatsHandler _towerTemplateHandler;
+    private TowerStatsHandler _towerStatsHandler;
 
     public TowerHandler(TowerTemplate template, Transform towerTransform, Transform shootingSpotTransform)
     {
@@ -29,9 +29,9 @@ public class TowerHandler
         _towerTransform = towerTransform;
         _shootingSpotTransform = shootingSpotTransform;
 
-        _towerTemplateHandler = new TowerStatsHandler();
+        _towerStatsHandler = new TowerStatsHandler();
 
-        _initialStats = _towerTemplateHandler.GetFinalStats(template);
+        _initialStats = _towerStatsHandler.GetFinalStats(template);
         CurrentStats = new TowerStats(_initialStats);
 
         _gameAssets = GameAssets.Instance;
@@ -41,7 +41,7 @@ public class TowerHandler
     {
         CurrentStats.Health -= damage * (1 - CurrentStats.ResistDamage / 100);
 
-        if (Utilities.ChanceFunc(CurrentStats.ChanceToKillCrewMember))
+        if (CurrentStats.CrewNumber > 0 && Utilities.ChanceFunc(CurrentStats.ChanceToKillCrewMember))
             CurrentStats.CrewNumber--;
     }
 
@@ -72,7 +72,8 @@ public class TowerHandler
         if (_enemiesInSight.Count == 0)
             return;
 
-        _timer += Time.deltaTime;
+        float timeIncrement = Time.deltaTime * CurrentStats.CrewNumber / _initialStats.CrewNumber;
+        _timer += timeIncrement;
 
         if (_timer < CurrentStats.ShootingRate)
             return;
@@ -126,8 +127,8 @@ public class TowerHandler
 
     public void UpdateStats()
     {
-        _initialStats = _towerTemplateHandler.GetFinalStats(_towerTemplate);
-        TowerStats statDifference = _towerTemplateHandler.GetTowerStatDifference(_towerTemplate);
+        _initialStats = _towerStatsHandler.GetFinalStats(_towerTemplate);
+        TowerStats statDifference = _towerStatsHandler.GetTowerStatDifference(_towerTemplate);
 
         CurrentStats += statDifference;
     }

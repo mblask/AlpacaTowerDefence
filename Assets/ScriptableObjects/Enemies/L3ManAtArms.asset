@@ -19,7 +19,8 @@ MonoBehaviour:
   Health: 15
   MovingSpeed: 1.2
   Range: 1.6
-  TowerSearchTimeInterval: 0.5
+  BuildingSearchInterval: 0.2
+  BuildingAttackInterval: 0.6
   GoldDrop: {x: 2, y: 4}
   WoodDrop: {x: 1, y: 3}
   MetalDrop: {x: 0, y: 2}

@@ -1,12 +1,16 @@
-﻿public interface IEnemyHandler
-{
-    float Health { get; set; }
-    bool IsActive { get; }
-    float Range { get; set; }
+﻿using System;
 
+public interface IEnemyHandler
+{
+    public EnemyStats CurrentStats { get; }
+    bool IsActive { get; }
+
+    void HandleBehaviour();
     void AttackBuilding(Building building);
-    void BuildingSearchProcedure();
-    void CheckForBuildingsInRange();
+    void AttackProcedure();
+    void BuildingSearchProcedure(Action actionToPerform);
+    void FindBuildingAndAttackIt();
+    void FindBuildingsInRange();
     void Damage(float value);
     void Die();
     void GetNextWaypoint();
