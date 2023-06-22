@@ -78,7 +78,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
 
         for (int i = 0; i < enemyNumber; i++)
         {
-            Vector2 spawnPosition = _checkpointManager.GetSpawnPoint().position + Utilities.GetRandomVector3(0.5f);
+            Vector2 spawnPosition = _checkpointManager.GetSpawnPoints().GetRandomElement().position + Utilities.GetRandomVector3(0.5f);
             SpawnEnemy(spawnPosition, _enemiesToSpawn.GetRandomElement());
         }
 

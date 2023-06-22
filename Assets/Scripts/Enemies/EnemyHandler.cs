@@ -56,7 +56,7 @@ public class EnemyHandler : IEnemyHandler
 
     public void HandleBehaviour()
     {
-
+        Debug.Log("Handle behaviour not implemented");
     }
 
     public void SetCheckpointGroup(int checkpointGroup)
