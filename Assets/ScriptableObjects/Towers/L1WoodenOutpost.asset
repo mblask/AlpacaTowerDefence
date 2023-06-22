@@ -15,6 +15,7 @@ MonoBehaviour:
   Name: Wooden Outpost
   Building: 0
   Sprite: {fileID: 21300000, guid: 50cadacc1c6a36a46872947b6fd12480, type: 3}
+  LocalScale: {x: 1, y: 1}
   Color: {r: 0.5188679, g: 0.36708716, b: 0.2227216, a: 1}
   Cost: 60
   Health: 60

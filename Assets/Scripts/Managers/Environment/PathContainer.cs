@@ -1,7 +1,7 @@
-public class BuildingsContainer : Container
+public class PathContainer : Container
 {
-    private static BuildingsContainer _instance;
-    public static BuildingsContainer Instance
+    private static PathContainer _instance;
+    public static PathContainer Instance
     {
         get
         {

@@ -16,13 +16,14 @@ public class GameAssets : MonoBehaviour
     }
 
     [Header("Building templates")]
-    public List<TowerTemplate> BuildingTemplates;
+    public List<BuildingTemplate> BuildingTemplates;
 
     [Header("Enemy templates")]
     public List<EnemyTemplate> EnemyTemplates;
 
     [Header("Objects")]
     public Transform Tower;
+    public Transform Trap;
     public Transform Enemy;
     public Transform Canonball;
     public Transform DestructionArea;

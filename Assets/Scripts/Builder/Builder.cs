@@ -12,6 +12,7 @@ public class Builder : MonoBehaviour, IBuilder
     }
 
     private GameAssets _gameAssets;
+    private BuildingsContainer _buildingsContainer;
     private IResourcesManager _resourcesManager;
 
     private void Awake()
@@ -22,6 +23,7 @@ public class Builder : MonoBehaviour, IBuilder
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _buildingsContainer = BuildingsContainer.Instance;
         _resourcesManager = ResourcesManager.Instance;
     }
 
@@ -38,12 +40,32 @@ public class Builder : MonoBehaviour, IBuilder
             TowerTemplate towerTemplate = (TowerTemplate)buildingTemplate;
             buildTower(towerTemplate, position);
         }
+
+        if (buildingTemplate is TrapTemplate)
+        {
+            TrapTemplate trapTemplate = (TrapTemplate)buildingTemplate;
+            buildTrap(trapTemplate, position);
+        }
     }
 
     private void buildTower(TowerTemplate towerTemplate, Vector3 position)
     {
-        ITower tower = Instantiate(_gameAssets.Tower, position, Quaternion.identity, BuildingsContainer.GetContainer()).GetComponent<ITower>();
+        Transform towerTransform = Instantiate(_gameAssets.Tower, position, Quaternion.identity, _buildingsContainer.transform);
+        _buildingsContainer.AddElement(towerTransform);
+
+        ITower tower = towerTransform.GetComponent<ITower>();
         tower.SetupTower(towerTemplate);
         _resourcesManager.UpdateGold(-towerTemplate.Cost);
+    }
+
+    private void buildTrap(TrapTemplate trapTemplate, Vector3 position)
+    {
+        Transform trapTransform = Instantiate(_gameAssets.Trap, position, Quaternion.identity,
+            _buildingsContainer.transform);
+        _buildingsContainer.AddElement(trapTransform);
+
+        ITrap trap = trapTransform.GetComponent<ITrap>();
+        trap.SetupTrap(trapTemplate);
+        _resourcesManager.UpdateGold(-trapTemplate.Cost);
     }
 }

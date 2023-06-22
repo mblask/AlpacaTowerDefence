@@ -19,4 +19,9 @@ public interface IBuildingManager
     /// Shows the view of the stone tower
     /// </summary>
     void ViewStoneTower();
+
+    /// <summary>
+    /// Shows the view of the spike trap
+    /// </summary>
+    void ViewSpikeTrap();
 }

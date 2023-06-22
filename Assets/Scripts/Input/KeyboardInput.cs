@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class KeyboardInput : MonoBehaviour
@@ -12,7 +11,7 @@ public class KeyboardInput : MonoBehaviour
         }
     }
 
-    [Header("Building keys")]
+    [Header("Tower keys")]
     [SerializeField] private KeyCode _woodenOutpostKey;
     [SerializeField] private KeyCode _woodenTowerKey;
     [SerializeField] private KeyCode _stoneTowerKey;
@@ -20,8 +19,14 @@ public class KeyboardInput : MonoBehaviour
     [SerializeField] private KeyCode _fortKey;
     [SerializeField] private KeyCode _castleKey;
 
+    [Header("Selection keys")]
+    [SerializeField] private KeyCode _trapSelectionKey;
+
+    [Header("Trap keys")]
+    [SerializeField] private KeyCode _spikeTrapKey;
+
     [Header("All same-sort-building-action key")]
-    [SerializeField] private KeyCode _allEqualActionKey;
+    [SerializeField] private KeyCode _equalBuildingActionKey;
 
     [Header("Building action keys")]
     [SerializeField] private KeyCode _buildingRepairKey;
@@ -34,6 +39,7 @@ public class KeyboardInput : MonoBehaviour
     private IBuildingManager _buildingManager;
     private IBuildingUpgradeManager _buildingUpgradeManager;
     private IInteractableManager _interactableManager;
+    private BuildingsContainer _buildingContainer;
 
     private void Awake()
     {
@@ -45,21 +51,31 @@ public class KeyboardInput : MonoBehaviour
         _buildingManager = BuildingManager.Instance;
         _buildingUpgradeManager = BuildingUpgradeManager.Instance;
         _interactableManager = InteractableManager.Instance;
+        _buildingContainer = BuildingsContainer.Instance;
     }
 
     private void Update()
     {
+        viewTowers();
+        viewSpikeTrap();
+        repairBuilding();
+        repairAllBuildings();
+        towerArmorUpgrade();
+        towerConstructionUpgrade();
+        towerCrewUpgrade();
+    }
+
+    private void viewTowers()
+    {
+        if (Input.GetKey(_trapSelectionKey))
+            return;
+
         viewWoodenOutpost();
         viewWoodenTower();
         viewStoneTower();
         viewTowerComplex();
         viewFort();
         viewCastle();
-        repairBuilding();
-        repairAllBuildings();
-        towerArmorUpgrade();
-        towerConstructionUpgrade();
-        towerCrewUpgrade();
     }
 
     private void viewWoodenOutpost()
@@ -98,6 +114,12 @@ public class KeyboardInput : MonoBehaviour
             Debug.Log("View castle");
     }
 
+    private void viewSpikeTrap()
+    {
+        if (Input.GetKey(_trapSelectionKey) && Input.GetKeyUp(_spikeTrapKey))
+            _buildingManager.ViewSpikeTrap();
+    }
+
     private void repairBuilding()
     {
         if (Input.GetKeyUp(_buildingRepairKey))
@@ -109,10 +131,10 @@ public class KeyboardInput : MonoBehaviour
 
     private void repairAllBuildings()
     {
-        if (Input.GetKey(_allEqualActionKey) && Input.GetKeyUp(_buildingRepairKey))
+        if (Input.GetKey(_equalBuildingActionKey) && Input.GetKeyUp(_buildingRepairKey))
         {
             Debug.Log("Repair all buildings");
-            foreach (Transform transform in BuildingsContainer.GetContainer())
+            foreach (Transform transform in _buildingContainer.GetElements())
                 transform.GetComponent<Building>()?.Repair();
         }
     }

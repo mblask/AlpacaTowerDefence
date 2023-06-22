@@ -1,16 +1,16 @@
-using UnityEngine;
-
-public class EnemiesContainer : MonoBehaviour
+public class EnemiesContainer : Container
 {
     public static EnemiesContainer _instance;
+    public static EnemiesContainer Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
 
     private void Awake()
     {
         _instance = this;
-    }
-
-    public static Transform GetContainer()
-    {
-        return _instance.transform;
     }
 }

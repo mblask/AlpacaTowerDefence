@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Handles spawning of <see cref="Enemy"/> objects
 /// </summary>
 public interface IEnemySpawner
 {
+    bool LastWaveSpawned { get; }
+
     void SetupSpawner(LevelSettings levelSettings);
 
     /// <summary>

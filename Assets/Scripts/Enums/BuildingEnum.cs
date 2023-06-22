@@ -5,5 +5,8 @@ public enum BuildingEnum
     StoneTower,
     TowerComplex,
     Fort,
-    Castle
+    Castle,
+    SpikeTrap,
+    FireTrap,
+    TarTrap
 }

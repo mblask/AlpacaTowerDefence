@@ -28,6 +28,7 @@ public class EnemyHandler : IEnemyHandler
     private ILevelChecker _levelChecker;
     private IResourceSpawner _resourceSpawner;
     private ICheckpointManager _checkpointManager;
+    private EnemiesContainer _enemiesContainer;
     private GameAssets _gameAssets;
 
     public EnemyHandler(EnemyTemplate template, Transform transform)
@@ -46,6 +47,7 @@ public class EnemyHandler : IEnemyHandler
         _levelChecker = LevelChecker.Instance;
         _resourceSpawner = ResourceSpawner.Instance;
         _checkpointManager = CheckpointManager.Instance;
+        _enemiesContainer = EnemiesContainer.Instance;
         _gameAssets = GameAssets.Instance;
     }
 
@@ -66,9 +68,11 @@ public class EnemyHandler : IEnemyHandler
 
     public void Die()
     {
-        _levelChecker.RemoveEnemy(_transform);
         _resourceSpawner.SpawnResources(_enemyTemplate);
-        UnityEngine.Object.Destroy(_transform.gameObject);
+        _enemiesContainer.RemoveAndDestroy(_transform, () =>
+        {
+            _levelChecker.CheckLevelCompletion();
+        });
     }
 
     public void Move()
@@ -98,9 +102,11 @@ public class EnemyHandler : IEnemyHandler
         if (temporary == _nextWaypoint)
         {
             IsActive = false;
-            _levelChecker.IncrementEnemiesSurvived();
-            _levelChecker.RemoveEnemy(_transform);
-            UnityEngine.Object.Destroy(_transform.gameObject);
+            _enemiesContainer.RemoveAndDestroy(_transform, () =>
+            {
+                _levelChecker.IncrementEnemiesSurvived();
+                _levelChecker.CheckLevelCompletion();
+            });
         }
 
         _nextWaypoint = _checkpointManager.GetNextWaypoint(_nextWaypoint);

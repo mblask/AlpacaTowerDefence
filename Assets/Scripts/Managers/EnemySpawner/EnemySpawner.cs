@@ -16,11 +16,12 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     [SerializeField] private bool _spawnEnemies = false;
     [SerializeField] private int _numberOfWaves = 5;
 
-    private Transform _enemiesContainer;
     private List<EnemyTemplate> _enemiesToSpawn = new List<EnemyTemplate>();
-    private List<Transform> _lastSpawnedWave = new List<Transform>();
+    private bool _lastWaveSpawned = false;
+    public bool LastWaveSpawned => _lastWaveSpawned;
 
     private GameAssets _gameAssets;
+    private EnemiesContainer _enemiesContainer;
     private ICheckpointManager _checkpointManager;
     private ILevelChecker _levelChecker;
 
@@ -30,12 +31,12 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     private void Awake()
     {
         _instance = this;
-        _enemiesContainer = transform.Find("Enemies");
     }
     
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _enemiesContainer = EnemiesContainer.Instance;
         _checkpointManager = CheckpointManager.Instance;
         _levelChecker = LevelChecker.Instance;
     
@@ -75,11 +76,10 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         if (_enemiesToSpawn.Count == 0)
             _enemiesToSpawn.Add(_gameAssets.EnemyTemplates.Find(template => template.Name == "Footman"));
 
-        _lastSpawnedWave.Clear();
         for (int i = 0; i < enemyNumber; i++)
         {
             Vector2 spawnPosition = _checkpointManager.GetSpawnPoint().position + Utilities.GetRandomVector3(0.5f);
-            _lastSpawnedWave.Add(SpawnEnemy(spawnPosition, _enemiesToSpawn.GetRandomElement()));
+            SpawnEnemy(spawnPosition, _enemiesToSpawn.GetRandomElement());
         }
 
         _levelChecker.AddEnemiesSpawned(enemyNumber);
@@ -88,13 +88,15 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         if (_numberOfWaves == 0)
         {
             _spawnEnemies = false;
-            _levelChecker.SetLastWaveSpawned(_lastSpawnedWave);
+            _lastWaveSpawned = true;
         }
     }
 
     public Transform SpawnEnemy(Vector3 position, EnemyTemplate enemyTemplate)
     {
-        Transform enemyTransform = Instantiate(_gameAssets.Enemy, position, Quaternion.identity, _enemiesContainer);
+        Transform enemyTransform = 
+            Instantiate(_gameAssets.Enemy, position, Quaternion.identity, _enemiesContainer.transform);
+        _enemiesContainer.AddElement(enemyTransform);
         enemyTransform.GetComponent<Enemy>().SetupEnemy(enemyTemplate);
 
         return enemyTransform;

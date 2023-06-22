@@ -21,6 +21,11 @@ public class BuildingTemplate : ScriptableObject
     public Sprite Sprite;
 
     /// <summary>
+    /// Building sprite local scale
+    /// </summary>
+    public Vector2 LocalScale;
+
+    /// <summary>
     /// Building color
     /// </summary>
     public Color Color;

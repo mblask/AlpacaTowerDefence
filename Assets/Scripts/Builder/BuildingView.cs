@@ -72,6 +72,7 @@ public class BuildingView : MonoBehaviour, IBuildingView
         transform.position = Utilities.GetMouseWorldLocation();
         _buildingTemplate = buildingTemplate;
         _spriteRenderer.sprite = buildingTemplate.Sprite;
+        transform.localScale = buildingTemplate.LocalScale;
         Color color = buildingTemplate.Color;
         color.a = 0.6f;
         _spriteRenderer.color = color;

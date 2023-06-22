@@ -18,9 +18,16 @@ public class BuildingUpgradeManager : MonoBehaviour, IBuildingUpgradeManager
     private TowerUpgrades _lastTowerUpgrades = new TowerUpgrades();
     [SerializeField] private TowerUpgrades _towerUpgrades = new TowerUpgrades();
 
+    private BuildingsContainer _buildingContainer;
+
     private void Awake()
     {
         _instance = this;
+    }
+
+    private void Start()
+    {
+        _buildingContainer = BuildingsContainer.Instance;
     }
 
     public TowerUpgrades GetTowerUpgrades()
@@ -55,7 +62,7 @@ public class BuildingUpgradeManager : MonoBehaviour, IBuildingUpgradeManager
 
     private void UpdateTowers()
     {
-        Transform buildingContainer = BuildingsContainer.GetContainer();
+        Transform buildingContainer = _buildingContainer.transform;
         foreach (Transform transform in buildingContainer)
         {
             Tower tower = transform.GetComponent<Tower>();

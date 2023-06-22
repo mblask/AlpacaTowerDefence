@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelChecker : MonoBehaviour, ILevelChecker
@@ -17,10 +16,9 @@ public class LevelChecker : MonoBehaviour, ILevelChecker
     [SerializeField] private int _enemiesSurvived;
     public int EnemiesSurvived => _enemiesSurvived;
 
-    private List<Transform> _lastEnemyWave;
-    private bool _lastWaveSpawned = false;
-
     private ILevelManager _levelManager;
+    private IEnemySpawner _enemySpawner;
+    private EnemiesContainer _enemyContainer;
     
     private void Awake()
     {
@@ -30,31 +28,19 @@ public class LevelChecker : MonoBehaviour, ILevelChecker
     private void Start()
     {
         _levelManager = LevelManager.Instance;
+        _enemySpawner = EnemySpawner.Instance;
+        _enemyContainer = EnemiesContainer.Instance;
     }
 
-    public void RemoveEnemy(Transform enemyTransform)
+    public void CheckLevelCompletion()
     {
-        if (!_lastWaveSpawned)
+        if (!_enemySpawner.LastWaveSpawned)
             return;
 
-        _lastEnemyWave.Remove(enemyTransform);
+        if (_enemyContainer.ElementCount > 0)
+            return;
 
-        if (_lastEnemyWave.Count == 0)
-        {
-            Debug.Log("Level finished");
-
-            _lastWaveSpawned = false;
-            _lastEnemyWave = new List<Transform>();
-            _enemiesSpawned = 0;
-            _enemiesSurvived = 0;
-            _levelManager.Setup();
-        }
-    }
-
-    public void SetLastWaveSpawned(List<Transform> lastWaveSpawned)
-    {
-        _lastWaveSpawned = true;
-        _lastEnemyWave = new List<Transform>(lastWaveSpawned);
+        _levelManager.SetupLevel();
     }
 
     public void AddEnemiesSpawned(int enemiesSpawned)

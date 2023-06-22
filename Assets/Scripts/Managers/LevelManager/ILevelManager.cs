@@ -1,4 +1,10 @@
-﻿public interface ILevelManager
+﻿/// <summary>
+/// Handles level processes
+/// </summary>
+public interface ILevelManager
 {
-    void Setup();
+    /// <summary>
+    /// Sets up a new level
+    /// </summary>
+    void SetupLevel();
 }

@@ -54,17 +54,12 @@ public class Tower : Building, ITower
             _isActive = false;
 
         if (_towerHandler.CurrentStats.Health < 0.0f)
-            Ruin();
+            DestroyBuilding();
     }
 
     public override void Repair()
     {
         _towerHandler.ToggleRepairs();
-    }
-
-    public void Ruin()
-    {
-        Destroy(gameObject);
     }
 
     public void UpdateStats()

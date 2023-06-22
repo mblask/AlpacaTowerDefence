@@ -18,6 +18,14 @@ public abstract class Building : InteractableObject
     public abstract void Damage(float value);
 
     /// <summary>
+    /// Destroys the <see cref="Building"/>
+    /// </summary>
+    public void DestroyBuilding()
+    {
+        Destroy(gameObject);
+    }
+
+    /// <summary>
     /// Toggle repair process of a building, effectivelly lowering its effectivity but slowly repairing damages
     /// </summary>
     public abstract void Repair();

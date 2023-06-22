@@ -29,10 +29,10 @@ public class LevelManager : MonoBehaviour, ILevelManager
         _checkpointManager = CheckpointManager.Instance;
         _enemySpawner = EnemySpawner.Instance;
     
-        Setup();
+        SetupLevel();
     }
 
-    public void Setup()
+    public void SetupLevel()
     {
         LevelSettings levelSettings = _levelRules.LevelSettings.GetRandomElement();
 

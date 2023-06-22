@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: SpikeTrap
+  m_EditorClassIdentifier: Assembly-CSharp::TrapTemplate
+  Name: SpikeTrap
+  Building: 6
+  Sprite: {fileID: -2413806693520163455, guid: 729ce08463db0ee469e2767e2b0ff052, type: 3}
+  LocalScale: {x: 0.5, y: 0.5}
+  Color: {r: 0.33962262, g: 0.23869704, b: 0.23869704, a: 1}
+  Cost: 15
+  Health: 20
+  CrewNumber: 0
+  BaseRepair: 0
+  Damage: 50
+  Range: 1
+  ResistDamage: 0
+  EnemyCheckRate: 0.1
+  TrapActivationTime: 0.5

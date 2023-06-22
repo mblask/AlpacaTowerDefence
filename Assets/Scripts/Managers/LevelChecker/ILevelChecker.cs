@@ -10,16 +10,9 @@ public interface ILevelChecker
     int EnemiesSurvived { get; }
 
     /// <summary>
-    /// Remove dead <see cref="Enemy"/>'s transform from the last wave list
+    /// Checks the completion objectives of the level and if they are accomplished loads a new level
     /// </summary>
-    /// <param name="enemyTransform"></param>
-    void RemoveEnemy(Transform enemyTransform);
-
-    /// <summary>
-    /// Add <see cref="Enemy"/> transforms from last wave to a list
-    /// </summary>
-    /// <param name="lastWaveSpawned"></param>
-    void SetLastWaveSpawned(List<Transform> lastWaveSpawned);
+    void CheckLevelCompletion();
 
     /// <summary>
     /// Add a number of <see cref="Enemy"/> objects spawned

@@ -3,7 +3,7 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
     private GameAssets _gameAssets;
-    private Transform _environment;
+    private NatureContainer _natureContainer;
 
     [SerializeField] private bool _spawnFlag = true;
 
@@ -13,7 +13,8 @@ public class Checkpoint : MonoBehaviour
             return;
 
         _gameAssets = GameAssets.Instance;
-        _environment = EnvironmentContainer.GetNaturePiecesTransform();
-        Instantiate(_gameAssets.CheckpointFlag, transform.position, Quaternion.identity, _environment);
+        _natureContainer = NatureContainer.Instance;
+        Transform checkpointTransform = Instantiate(_gameAssets.CheckpointFlag, transform.position, Quaternion.identity, _natureContainer.transform);
+        _natureContainer.AddElement(checkpointTransform);
     }
 }
