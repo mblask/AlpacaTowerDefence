@@ -57,7 +57,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
 
         if (_timer >= _spawnTime)
         {
-            SpawnEnemyWave();
+            SpawnWave();
             _timer = 0.0f;
             _spawnTime = Random.Range(5.0f, 10.0f);
         }
@@ -71,7 +71,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         _spawnEnemies = true;
     }
 
-    public void SpawnEnemyWave(int enemyNumber = 5)
+    public void SpawnWave(int enemyNumber = 5)
     {
         if (_enemiesToSpawn.Count == 0)
             _enemiesToSpawn.Add(_gameAssets.EnemyTemplates.Find(template => template.Name == "Footman"));

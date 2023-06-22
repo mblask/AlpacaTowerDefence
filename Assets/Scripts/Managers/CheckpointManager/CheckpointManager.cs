@@ -29,6 +29,11 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
         _instance = this;
     }
 
+    private void Start()
+    {
+        _checkpointsContainer = CheckpointsContainer.Instance;
+    }
+
     public void GenerateWithMultiSpawnPoints(int numberOfSpawnPoints)
     {
         clearCheckpoints();
@@ -36,15 +41,15 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
         if (_gameAssets == null)
             _gameAssets = GameAssets.Instance;
 
-        _checkpointsContainer = CheckpointsContainer.GetContainer();
+        _checkpointsContainer = CheckpointsContainer.Instance;
 
         int spawnSide = Utilities.ChanceFunc(50) ? 1 : -1;
         for (int i = 0; i < numberOfSpawnPoints; i++)
             _spawnPoints.Add(Instantiate(_gameAssets.Spawnpoint, Utilities.GetRandomXBoundaryPosition(1.0f, +spawnSide), 
-                Quaternion.identity, _checkpointsContainer));
+                Quaternion.identity, _checkpointsContainer.transform));
 
         _exitPoint = Instantiate(_gameAssets.Exitpoint, Utilities.GetRandomXBoundaryPosition(1.0f, -spawnSide),
-            Quaternion.identity, _checkpointsContainer);
+            Quaternion.identity, _checkpointsContainer.transform);
 
         float viewAngle = 45;
 
@@ -74,7 +79,7 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
                     continue;
                 }
 
-                tempTransform = Instantiate(_gameAssets.CheckpointPrefab, newPosition, Quaternion.identity, _checkpointsContainer);
+                tempTransform = Instantiate(_gameAssets.CheckpointPrefab, newPosition, Quaternion.identity, _checkpointsContainer.transform);
                 _checkpoints.Add(tempTransform);
             }
         }
@@ -91,9 +96,9 @@ public class CheckpointManager : MonoBehaviour, ICheckpointManager
 
         int spawnSide = Utilities.ChanceFunc(50) ? 1 : -1;
         _spawnPoint = Instantiate(_gameAssets.Spawnpoint, Utilities.GetRandomXBoundaryPosition(1.0f, +spawnSide),
-            Quaternion.identity, _checkpointsContainer);
+            Quaternion.identity, _checkpointsContainer.transform);
         _exitPoint = Instantiate(_gameAssets.Exitpoint, Utilities.GetRandomXBoundaryPosition(1.0f, -spawnSide),
-            Quaternion.identity, _checkpointsContainer);
+            Quaternion.identity, _checkpointsContainer.transform);
 
         float viewAngle = 45;
         Transform tempTransform = _spawnPoint;

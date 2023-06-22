@@ -298,6 +298,8 @@ MonoBehaviour:
   Canonball: {fileID: 2788675210573203231, guid: 0812b3d4f371e9441a1149e512793cf6, type: 3}
   DestructionArea: {fileID: 6223586052196916371, guid: c8d36e49fd194214c992b2de9e30512a, type: 3}
   CheckpointPrefab: {fileID: 2738569333470577060, guid: c7f36bfc8e0d87c4bb634e99f00f2a7f, type: 3}
+  Spawnpoint: {fileID: 3223418355999352694, guid: 267d73e6683b1424895ba8976c089c89, type: 3}
+  Exitpoint: {fileID: 4976344073002804882, guid: 53de80514b4c28240abfb3dc8af915ae, type: 3}
   CheckpointFlag: {fileID: 374296984899302677, guid: 2a5d2859374d6674f9d71fb065f79ca8, type: 3}
   Torch: {fileID: 5509023512338392638, guid: 290ca8436fa4a3c49b64bbd053520da5, type: 3}
   Bush: {fileID: 1087217313219454370, guid: 146e3b5722ebb0b4984a7cf4cae477a6, type: 3}
@@ -1562,6 +1564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 182662476}
+  _spawnPoints: []
   _exitPoint: {fileID: 1388631889}
   _checkpoints: []
 --- !u!4 &2065819083

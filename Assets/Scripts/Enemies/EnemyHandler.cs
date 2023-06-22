@@ -18,6 +18,9 @@ public class EnemyHandler : IEnemyHandler
     private float _towerSearchTimeInterval;
     private Vector3 _positionAroundWaypoint;
 
+    private EnemyStats _initialStats;
+    [field:SerializeField] public EnemyStats CurrentStats { get; private set; }
+
     [field: SerializeField] public float Health { get; set; }
     [field: SerializeField] public float Range { get; set; }
 
@@ -40,7 +43,7 @@ public class EnemyHandler : IEnemyHandler
         Health = template.Health;
         Range = template.Range;
         _movingSpeed = template.MovingSpeed;
-        _towerSearchTimeInterval = template.TowerSearchTimeInterval;
+        _towerSearchTimeInterval = template.BuildingSearchInterval;
 
         _environmentGenerator = EnvironmentGenerator.Instance;
         _particleSystemSpawner = ParticleSystemSpawner.Instance;
@@ -49,6 +52,40 @@ public class EnemyHandler : IEnemyHandler
         _checkpointManager = CheckpointManager.Instance;
         _enemiesContainer = EnemiesContainer.Instance;
         _gameAssets = GameAssets.Instance;
+    }
+
+    public void HandleBehaviour()
+    {
+
+    }
+
+    public void SetCheckpointGroup(int checkpointGroup)
+    {
+
+    }
+
+    public void SetBehaviour(EnemyBehaviour enemyBehaviour)
+    {
+
+    }
+
+    public void AttackProcedure()
+    {
+
+    }
+
+    public void BuildingSearchProcedure(Action actionToPerform)
+    {
+
+    }
+    public void FindBuildingAndAttackIt()
+    {
+
+    }
+
+    public void FindBuildingsInRange()
+    {
+
     }
 
     public void LayPath()
