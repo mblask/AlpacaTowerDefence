@@ -9,7 +9,10 @@ public class EnemyHandler : IEnemyHandler
 {
     public bool IsActive { get; private set; }
 
-    private Transform _transform;
+    private EnemyBehaviour _enemyBehaviour;
+    private int _checkpointGroup;
+
+    private Transform _enemyTransform;
     private Transform _nextWaypoint;
 
     private EnemyTemplate _enemyTemplate;
@@ -18,7 +21,11 @@ public class EnemyHandler : IEnemyHandler
     private float _towerSearchTimeInterval;
     private Vector3 _positionAroundWaypoint;
 
-    private EnemyStats _initialStats;
+    private bool _isAttacking = false;
+    private Building _buildingInSight;
+    private float _buildingSearchTimer;
+    private float _buildingAttackTimer;
+
     [field:SerializeField] public EnemyStats CurrentStats { get; private set; }
 
     [field: SerializeField] public float Health { get; set; }
@@ -31,6 +38,7 @@ public class EnemyHandler : IEnemyHandler
     private ILevelChecker _levelChecker;
     private IResourceSpawner _resourceSpawner;
     private ICheckpointManager _checkpointManager;
+    private BuildingsContainer _buildingsContainer;
     private EnemiesContainer _enemiesContainer;
     private GameAssets _gameAssets;
 
@@ -38,75 +46,78 @@ public class EnemyHandler : IEnemyHandler
     {
         IsActive = true;
 
-        _transform = transform;
+        _enemyTransform = transform;
         _enemyTemplate = template;
-        Health = template.Health;
-        Range = template.Range;
-        _movingSpeed = template.MovingSpeed;
-        _towerSearchTimeInterval = template.BuildingSearchInterval;
+        CurrentStats = new EnemyStats(template);
 
         _environmentGenerator = EnvironmentGenerator.Instance;
         _particleSystemSpawner = ParticleSystemSpawner.Instance;
         _levelChecker = LevelChecker.Instance;
         _resourceSpawner = ResourceSpawner.Instance;
         _checkpointManager = CheckpointManager.Instance;
+        _buildingsContainer = BuildingsContainer.Instance;
         _enemiesContainer = EnemiesContainer.Instance;
         _gameAssets = GameAssets.Instance;
     }
 
-    public void HandleBehaviour()
-    {
-        Debug.Log("Handle behaviour not implemented");
-    }
-
     public void SetCheckpointGroup(int checkpointGroup)
     {
-
+        _checkpointGroup = checkpointGroup;
     }
 
     public void SetBehaviour(EnemyBehaviour enemyBehaviour)
     {
-
+        _enemyBehaviour = enemyBehaviour;
     }
 
-    public void AttackProcedure()
+    public void HandleBehaviour()
     {
-
-    }
-
-    public void BuildingSearchProcedure(Action actionToPerform)
-    {
-
-    }
-    public void FindBuildingAndAttackIt()
-    {
-
-    }
-
-    public void FindBuildingsInRange()
-    {
-
+        switch (_enemyBehaviour)
+        {
+            case EnemyBehaviour.Survive:
+                //Go to exit checkpoint
+                //Damage player buildings on the way
+                //Survive
+                Move();
+                BuildingSearchProcedure(() => FindBuildingsInRange());
+                break;
+            case EnemyBehaviour.Attack:
+                //Find player building and attack it
+                //If building destroyed go to next
+                //Repeat until no buildings left
+                //Go to exit checkpoint
+                Move();
+                BuildingSearchProcedure(() => FindBuildingAndAttackIt());
+                AttackProcedure();
+                break;
+            default:
+                break;
+        }
     }
 
     public void LayPath()
     {
+        if (_isAttacking)
+            return;
+
         float chanceToLayPath = 0.05f;
+
         if (!Utilities.ChanceFunc(chanceToLayPath))
             return;
 
-        _environmentGenerator.LayPath(_transform.position);
+        _environmentGenerator.LayPath(_enemyTransform.position);
     }
 
     public void Damage(float value)
     {
-        _particleSystemSpawner.Spawn(_gameAssets.BloodPS, _transform.position);
+        _particleSystemSpawner.Spawn(_gameAssets.BloodPS, _enemyTransform.position);
         Health -= value;
     }
 
     public void Die()
     {
         _resourceSpawner.SpawnResources(_enemyTemplate);
-        _enemiesContainer.RemoveAndDestroy(_transform, () =>
+        _enemiesContainer.RemoveAndDestroy(_enemyTransform, () =>
         {
             _levelChecker.CheckLevelCompletion();
         });
@@ -120,14 +131,14 @@ public class EnemyHandler : IEnemyHandler
         if (_nextWaypoint == null)
             GetNextWaypoint();
 
-        float distance = Vector2.Distance(_transform.position, _positionAroundWaypoint);
+        float distance = Vector2.Distance(_enemyTransform.position, _positionAroundWaypoint);
 
         float waypointRange = 0.1f;
         if (distance > waypointRange)
         {
-            Vector2 position = _transform.position;
+            Vector2 position = _enemyTransform.position;
             position += _movingSpeed * _movingDirection * Time.deltaTime;
-            _transform.position = position;
+            _enemyTransform.position = position;
         }
         else
             GetNextWaypoint();
@@ -139,7 +150,7 @@ public class EnemyHandler : IEnemyHandler
         if (temporary == _nextWaypoint)
         {
             IsActive = false;
-            _enemiesContainer.RemoveAndDestroy(_transform, () =>
+            _enemiesContainer.RemoveAndDestroy(_enemyTransform, () =>
             {
                 _levelChecker.IncrementEnemiesSurvived();
                 _levelChecker.CheckLevelCompletion();
@@ -150,29 +161,51 @@ public class EnemyHandler : IEnemyHandler
 
         float radiusAroundWaypoint = 0.5f;
         _positionAroundWaypoint = _nextWaypoint.position + Utilities.GetRandomVector3(radiusAroundWaypoint);
-        _movingDirection = _positionAroundWaypoint - _transform.position;
+        _movingDirection = _positionAroundWaypoint - _enemyTransform.position;
         _movingDirection.Normalize();
     }
 
-    public void BuildingSearchProcedure()
+    public void BuildingSearchProcedure(Action actionToPerform)
     {
-        _timer += Time.deltaTime;
-
-        if (_timer < _towerSearchTimeInterval)
+        if (_isAttacking)
             return;
 
-        _timer = 0.0f;
+        _buildingSearchTimer += Time.deltaTime;
 
-        float chanceToAttack = 5.0f;
-        if (!Utilities.ChanceFunc(chanceToAttack))
+        if (_buildingSearchTimer < CurrentStats.BuildingSearchTime)
             return;
 
-        CheckForBuildingsInRange();
+        _buildingSearchTimer = 0.0f;
+
+        actionToPerform.Invoke();
     }
 
-    public void CheckForBuildingsInRange()
+    public void FindBuildingAndAttackIt()
     {
-        List<Collider2D> colliders = Physics2D.OverlapCircleAll(_transform.position, Range)
+        _isAttacking = false;
+        if (_buildingsContainer.ElementCount == 0)
+            return;
+
+        if (_buildingInSight == null)
+        {
+            List<Collider2D> colliders = Physics2D.OverlapCircleAll(_enemyTransform.position, CurrentStats.Range)
+            .Where(collider => collider.GetComponent<Building>() != null)
+            .ToList();
+
+            if (colliders.Count == 0)
+                return;
+
+            _buildingInSight = colliders.GetRandomElement().GetComponent<Building>();
+        }
+
+        _isAttacking = true;
+
+        AttackBuilding(_buildingInSight);
+    }
+
+    public void FindBuildingsInRange()
+    {
+        List<Collider2D> colliders = Physics2D.OverlapCircleAll(_enemyTransform.position, Range)
             .Where(collider => collider.GetComponent<Building>() != null)
             .ToList();
 
@@ -180,15 +213,32 @@ public class EnemyHandler : IEnemyHandler
             return;
 
         Building building = colliders.GetRandomElement().GetComponent<Building>();
-        if (building == null)
+        AttackBuilding(building);
+    }
+
+    public void AttackProcedure()
+    {
+        if (!_isAttacking)
             return;
 
-        AttackBuilding(building);
+        _buildingAttackTimer += Time.deltaTime;
+
+        if (_buildingAttackTimer < CurrentStats.BuildingAttackTime)
+            return;
+
+        _buildingAttackTimer = 0.0f;
+        if (_buildingInSight == null)
+        {
+            _isAttacking = false;
+            return;
+        }
+
+        AttackBuilding(_buildingInSight);
     }
 
     public void AttackBuilding(Building building)
     {
-        ITorch torch = UnityEngine.Object.Instantiate(_gameAssets.Torch, _transform.position, Quaternion.identity, null).GetComponent<ITorch>();
+        ITorch torch = UnityEngine.Object.Instantiate(_gameAssets.Torch, _enemyTransform.position, Quaternion.identity, null).GetComponent<ITorch>();
         torch.SetupTorch(building);
     }
 }
