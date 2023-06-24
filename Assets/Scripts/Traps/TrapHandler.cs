@@ -8,11 +8,11 @@ public class TrapHandler
     private Transform _trapTransform;
 
     private float _enemyCheckingTimer;
-    //private List<Transform> _enemiesInSight = new List<Transform>();
     private bool _enemiesInRange = false;
 
     private float _trapActivationTimer;
 
+    public bool TrapTriggered => _trapTriggered;
     private bool _trapTriggered = false;
 
     private TrapStats _initialStats;
@@ -41,7 +41,16 @@ public class TrapHandler
             return;
 
         _trapActivationTimer = 0.0f;
-        Debug.Log("Trigger trap and deactivate it");
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(_trapTransform.position, CurrentStats.Range);
+        foreach (Collider2D collider in colliders)
+        {
+            Enemy enemy = collider.GetComponent<Enemy>();
+            if (enemy == null)
+                continue;
+
+            enemy.Damage(CurrentStats.Damage);
+        }
+
         _trapTriggered = true;
     }
 

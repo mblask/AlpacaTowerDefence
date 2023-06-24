@@ -5,6 +5,7 @@ public class Trap : Building, ITrap
     private SpriteRenderer _spriteRenderer;
     private Transform _trapRadiusMarker;
 
+    public override bool IsVisible => _trapHandler.TrapTriggered;
     public override float Health { get; }
 
     [SerializeField] private TrapHandler _trapHandler;
@@ -25,6 +26,10 @@ public class Trap : Building, ITrap
     {
         name = trapTemplate.Name;
         _spriteRenderer.color = trapTemplate.Color;
+
+        Vector3 scale = new Vector3(trapTemplate.Range, trapTemplate.Range, 0.0f) * 2.0f;
+        _trapRadiusMarker.transform.localScale = scale;
+        _trapRadiusMarker.gameObject.SetActive(false);
 
         _trapHandler = new TrapHandler(trapTemplate, transform);
     }

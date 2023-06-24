@@ -12,6 +12,7 @@ public class SelectionSprite : MonoBehaviour, ISelectionSprite
     }
 
     private bool _isActive = false;
+    private Vector3 _defaultScale;
 
     private SpriteRenderer _spriteRenderer;
     
@@ -20,13 +21,15 @@ public class SelectionSprite : MonoBehaviour, ISelectionSprite
         _instance = this;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _spriteRenderer.enabled = _isActive;
+        _defaultScale = transform.localScale;
     }
 
-    public void SetInteractible(InteractableObject interactible)
+    public void SetInteractible(InteractableObject interactable)
     {
-        transform.position = interactible.transform.position;
+        transform.position = interactable.transform.position;
         _isActive = true;
         _spriteRenderer.enabled = true;
+        Scaling(interactable);
     }
 
     public void ResetSelection()
@@ -35,5 +38,18 @@ public class SelectionSprite : MonoBehaviour, ISelectionSprite
 
         if (_spriteRenderer != null)
             _spriteRenderer.enabled = false;
+    }
+
+    private void Scaling(InteractableObject interactable)
+    {
+        transform.localScale = _defaultScale;
+        switch (interactable)
+        {
+            case Trap trap:
+                transform.localScale = trap.transform.localScale * 1.25f;
+                break;
+            default:
+                break;
+        }
     }
 }

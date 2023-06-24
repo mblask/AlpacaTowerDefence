@@ -20,7 +20,7 @@ MonoBehaviour:
   MovingSpeed: 1
   Range: 1.8
   BuildingSearchInterval: 0.2
-  BuildingAttackInterval: 0.6
+  BuildingAttackInterval: 0.9
   GoldDrop: {x: 2, y: 5}
   WoodDrop: {x: 1, y: 4}
   MetalDrop: {x: 1, y: 3}

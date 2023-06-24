@@ -16,9 +16,7 @@ public class EnemyHandler : IEnemyHandler
     private Transform _nextWaypoint;
 
     private EnemyTemplate _enemyTemplate;
-    private float _movingSpeed;
     private Vector2 _movingDirection;
-    private float _towerSearchTimeInterval;
     private Vector3 _positionAroundWaypoint;
 
     private bool _isAttacking = false;
@@ -27,11 +25,6 @@ public class EnemyHandler : IEnemyHandler
     private float _buildingAttackTimer;
 
     [field:SerializeField] public EnemyStats CurrentStats { get; private set; }
-
-    [field: SerializeField] public float Health { get; set; }
-    [field: SerializeField] public float Range { get; set; }
-
-    private float _timer;
 
     private IEnvironmentGenerator _environmentGenerator;
     private IParticleSystemSpawner _particleSystemSpawner;
@@ -72,13 +65,14 @@ public class EnemyHandler : IEnemyHandler
 
     public void HandleBehaviour()
     {
+        Move();
+
         switch (_enemyBehaviour)
         {
             case EnemyBehaviour.Survive:
                 //Go to exit checkpoint
                 //Damage player buildings on the way
                 //Survive
-                Move();
                 BuildingSearchProcedure(() => FindBuildingsInRange());
                 break;
             case EnemyBehaviour.Attack:
@@ -86,7 +80,6 @@ public class EnemyHandler : IEnemyHandler
                 //If building destroyed go to next
                 //Repeat until no buildings left
                 //Go to exit checkpoint
-                Move();
                 BuildingSearchProcedure(() => FindBuildingAndAttackIt());
                 AttackProcedure();
                 break;
@@ -111,7 +104,7 @@ public class EnemyHandler : IEnemyHandler
     public void Damage(float value)
     {
         _particleSystemSpawner.Spawn(_gameAssets.BloodPS, _enemyTransform.position);
-        Health -= value;
+        CurrentStats.Health -= value;
     }
 
     public void Die()
@@ -128,6 +121,9 @@ public class EnemyHandler : IEnemyHandler
         if (!IsActive)
             return;
 
+        if (_isAttacking)
+            return;
+
         if (_nextWaypoint == null)
             GetNextWaypoint();
 
@@ -137,7 +133,7 @@ public class EnemyHandler : IEnemyHandler
         if (distance > waypointRange)
         {
             Vector2 position = _enemyTransform.position;
-            position += _movingSpeed * _movingDirection * Time.deltaTime;
+            position += CurrentStats.MovingSpeed * _movingDirection * Time.deltaTime;
             _enemyTransform.position = position;
         }
         else
@@ -146,7 +142,7 @@ public class EnemyHandler : IEnemyHandler
 
     public void GetNextWaypoint()
     {
-        Transform temporary = _checkpointManager.GetNextWaypoint(_nextWaypoint);
+        Transform temporary = _checkpointManager.GetNextWaypointMultiple(_checkpointGroup, _nextWaypoint);
         if (temporary == _nextWaypoint)
         {
             IsActive = false;
@@ -157,7 +153,7 @@ public class EnemyHandler : IEnemyHandler
             });
         }
 
-        _nextWaypoint = _checkpointManager.GetNextWaypoint(_nextWaypoint);
+        _nextWaypoint = _checkpointManager.GetNextWaypointMultiple(_checkpointGroup, _nextWaypoint);
 
         float radiusAroundWaypoint = 0.5f;
         _positionAroundWaypoint = _nextWaypoint.position + Utilities.GetRandomVector3(radiusAroundWaypoint);
@@ -189,8 +185,11 @@ public class EnemyHandler : IEnemyHandler
         if (_buildingInSight == null)
         {
             List<Collider2D> colliders = Physics2D.OverlapCircleAll(_enemyTransform.position, CurrentStats.Range)
-            .Where(collider => collider.GetComponent<Building>() != null)
-            .ToList();
+                .Where(collider => {
+                    Building building = collider.GetComponent<Building>();
+                    return building != null && building.IsVisible;
+                    })
+                .ToList();
 
             if (colliders.Count == 0)
                 return;
@@ -205,7 +204,11 @@ public class EnemyHandler : IEnemyHandler
 
     public void FindBuildingsInRange()
     {
-        List<Collider2D> colliders = Physics2D.OverlapCircleAll(_enemyTransform.position, Range)
+        float chanceToAttack = 5.0f;
+        if (!Utilities.ChanceFunc(chanceToAttack))
+            return;
+
+        List<Collider2D> colliders = Physics2D.OverlapCircleAll(_enemyTransform.position, CurrentStats.Range)
             .Where(collider => collider.GetComponent<Building>() != null)
             .ToList();
 

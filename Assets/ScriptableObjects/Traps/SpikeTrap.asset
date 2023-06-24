@@ -25,4 +25,4 @@ MonoBehaviour:
   Range: 1
   ResistDamage: 0
   EnemyCheckRate: 0.1
-  TrapActivationTime: 0.5
+  TrapActivationTime: 0.7

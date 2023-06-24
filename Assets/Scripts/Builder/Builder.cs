@@ -35,16 +35,16 @@ public class Builder : MonoBehaviour, IBuilder
             return;
         }
 
-        if (buildingTemplate is TowerTemplate)
+        switch (buildingTemplate)
         {
-            TowerTemplate towerTemplate = (TowerTemplate)buildingTemplate;
-            buildTower(towerTemplate, position);
-        }
-
-        if (buildingTemplate is TrapTemplate)
-        {
-            TrapTemplate trapTemplate = (TrapTemplate)buildingTemplate;
-            buildTrap(trapTemplate, position);
+            case TowerTemplate towerTemplate:
+                buildTower(towerTemplate, position);
+                break;
+            case TrapTemplate trapTemplate:
+                buildTrap(trapTemplate, position);
+                break;
+            default:
+                break;
         }
     }
 

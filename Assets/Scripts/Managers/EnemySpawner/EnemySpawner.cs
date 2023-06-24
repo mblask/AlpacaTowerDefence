@@ -13,6 +13,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         }
     }
 
+    private EnemyBehaviour _enemyBehaviour;
     [SerializeField] private bool _spawnEnemies = false;
     [SerializeField] private int _numberOfWaves = 5;
 
@@ -67,8 +68,32 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
         _numberOfWaves = levelSettings.EnemyWaves;
         _enemiesToSpawn = levelSettings.Enemies;
+        _enemyBehaviour = levelSettings.EnemyBehaviour;
 
         _spawnEnemies = true;
+    }
+
+    public void SpawnWaveMultiSpawnpoints(int enemyNumber = 5)
+    {
+        if (_enemiesToSpawn.Count == 0)
+            _enemiesToSpawn.Add(_gameAssets.EnemyTemplates.Find(template => template.Name == "Footman"));
+
+        List<Transform> spawnPoints = _checkpointManager.GetSpawnPoints();
+        int randomSpawnpointIndex = Random.Range(0, spawnPoints.Count);
+        Transform randomSpawnPoint = spawnPoints[randomSpawnpointIndex];
+        for (int i = 0; i < enemyNumber; i++)
+        {
+            Vector2 spawnPosition = randomSpawnPoint.position + Utilities.GetRandomVector3(0.5f);
+            SpawnEnemy(spawnPosition, _enemiesToSpawn.GetRandomElement(), randomSpawnpointIndex);
+        }
+
+        _levelChecker.AddEnemiesSpawned(enemyNumber);
+        _numberOfWaves--;
+
+        if (_numberOfWaves == 0)
+        {
+            _spawnEnemies = false;
+        }
     }
 
     public void SpawnWave(int enemyNumber = 5)
@@ -76,10 +101,12 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         if (_enemiesToSpawn.Count == 0)
             _enemiesToSpawn.Add(_gameAssets.EnemyTemplates.Find(template => template.Name == "Footman"));
 
+        List<Transform> spawnPoints = _checkpointManager.GetSpawnPoints();
+        int randomSpawnpointIndex = Random.Range(0, spawnPoints.Count);
         for (int i = 0; i < enemyNumber; i++)
         {
             Vector2 spawnPosition = _checkpointManager.GetSpawnPoints().GetRandomElement().position + Utilities.GetRandomVector3(0.5f);
-            SpawnEnemy(spawnPosition, _enemiesToSpawn.GetRandomElement());
+            SpawnEnemy(spawnPosition, _enemiesToSpawn.GetRandomElement(), randomSpawnpointIndex);
         }
 
         _levelChecker.AddEnemiesSpawned(enemyNumber);
@@ -92,12 +119,17 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         }
     }
 
-    public Transform SpawnEnemy(Vector3 position, EnemyTemplate enemyTemplate)
+    public Transform SpawnEnemy(Vector3 position, EnemyTemplate enemyTemplate, int checkpointGroup)
     {
         Transform enemyTransform = 
             Instantiate(_gameAssets.Enemy, position, Quaternion.identity, _enemiesContainer.transform);
         _enemiesContainer.AddElement(enemyTransform);
-        enemyTransform.GetComponent<Enemy>().SetupEnemy(enemyTemplate);
+        EnemyBehaviour behaviour = _enemyBehaviour == EnemyBehaviour.Mixed ?
+            Utilities.GetRandomEnumValueExcluding(EnemyBehaviour.Mixed) : _enemyBehaviour;
+        enemyTransform.GetComponent<IEnemy>()
+            .SetupEnemy(enemyTemplate)
+            .SetEnemyBehaviour(behaviour)
+            .SetCheckpointGroup(checkpointGroup);
 
         return enemyTransform;
     }

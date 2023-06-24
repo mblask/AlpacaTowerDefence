@@ -12,6 +12,17 @@ public abstract class Building : InteractableObject
     }
 
     /// <summary>
+    /// By default buildings are visible, but <see cref="Trap"/> objects can be invisible
+    /// </summary>
+    public virtual bool IsVisible
+    {
+        get
+        {
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Damages <see cref="Building"/> for <paramref name="value"/> damage
     /// </summary>
     /// <param name="value"></param>
