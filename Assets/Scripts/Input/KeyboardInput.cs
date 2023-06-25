@@ -24,6 +24,7 @@ public class KeyboardInput : MonoBehaviour
 
     [Header("Trap keys")]
     [SerializeField] private KeyCode _spikeTrapKey;
+    [SerializeField] private KeyCode _fireTrapKey;
 
     [Header("All same-sort-building-action key")]
     [SerializeField] private KeyCode _equalBuildingActionKey;
@@ -57,7 +58,8 @@ public class KeyboardInput : MonoBehaviour
     private void Update()
     {
         viewTowers();
-        viewSpikeTrap();
+        viewTraps();
+
         repairBuilding();
         repairAllBuildings();
         towerArmorUpgrade();
@@ -76,6 +78,12 @@ public class KeyboardInput : MonoBehaviour
         viewTowerComplex();
         viewFort();
         viewCastle();
+    }
+
+    private void viewTraps()
+    {
+        viewSpikeTrap();
+        viewFireTrap();
     }
 
     private void viewWoodenOutpost()
@@ -118,6 +126,12 @@ public class KeyboardInput : MonoBehaviour
     {
         if (Input.GetKey(_trapSelectionKey) && Input.GetKeyUp(_spikeTrapKey))
             _buildingManager.ViewSpikeTrap();
+    }
+
+    private void viewFireTrap()
+    {
+        if (Input.GetKey(_trapSelectionKey) && Input.GetKeyUp(_fireTrapKey))
+            _buildingManager.ViewFireTrap();
     }
 
     private void repairBuilding()

@@ -24,4 +24,9 @@ public interface IBuildingManager
     /// Shows the view of the spike trap
     /// </summary>
     void ViewSpikeTrap();
+
+    /// <summary>
+    /// Shows the view of the fire trap
+    /// </summary>
+    void ViewFireTrap();
 }

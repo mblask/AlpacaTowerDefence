@@ -287,6 +287,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5965f4e101c5c4a43816194503095e95, type: 2}
   - {fileID: 11400000, guid: d3696b2f8dd981945afdb64cd1133274, type: 2}
   - {fileID: 11400000, guid: 88d6f73579f94034d9bb5018f54f6da0, type: 2}
+  - {fileID: 11400000, guid: cbcc1cb53ee7b574db4044e8f7e63eaa, type: 2}
   EnemyTemplates:
   - {fileID: 11400000, guid: 8a8d33a13b64c514fabf9c16da27fa8d, type: 2}
   - {fileID: 11400000, guid: 008191401498b4e499e86d603b0c976c, type: 2}
@@ -977,7 +978,8 @@ MonoBehaviour:
   _castleKey: 54
   _trapSelectionKey: 116
   _spikeTrapKey: 49
-  _equalBuildingActionKey: 0
+  _fireTrapKey: 50
+  _equalBuildingActionKey: 306
   _buildingRepairKey: 114
   _towerArmorUpgradeKey: 113
   _towerConstructionUpgradeKey: 119

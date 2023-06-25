@@ -6,7 +6,7 @@ public class Trap : Building, ITrap
     private Transform _trapRadiusMarker;
 
     public override bool IsVisible => _trapHandler.TrapTriggered;
-    public override float Health { get; }
+    public override float Health => _trapHandler.CurrentStats.Health;
 
     [SerializeField] private TrapHandler _trapHandler;
 

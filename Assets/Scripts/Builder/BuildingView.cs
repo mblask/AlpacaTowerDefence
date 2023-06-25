@@ -39,8 +39,15 @@ public class BuildingView : MonoBehaviour, IBuildingView
         if (!_isActive)
             return;
 
-        transform.position = Utilities.GetMouseWorldLocation();
+        followMouse();
         checkSurroundings();
+    }
+
+    private void followMouse()
+    {
+        if (!_isActive)
+            return;
+        transform.position = Utilities.GetMouseWorldLocation();
     }
 
     public void SetupView(BuildingTemplate buildingTemplate)
@@ -69,7 +76,6 @@ public class BuildingView : MonoBehaviour, IBuildingView
 
     private void setupViewParameters(BuildingTemplate buildingTemplate)
     {
-        transform.position = Utilities.GetMouseWorldLocation();
         _buildingTemplate = buildingTemplate;
         _spriteRenderer.sprite = buildingTemplate.Sprite;
         transform.localScale = buildingTemplate.LocalScale;
@@ -82,8 +88,22 @@ public class BuildingView : MonoBehaviour, IBuildingView
     private void checkSurroundings()
     {
         _canBuild = true;
-        Collider2D[] colliders = Physics2D
-            .OverlapBoxAll(transform.position + new Vector3(0.0f, transform.localScale.y / 2, 0.0f), _checkSurroundingBox, 0.0f);
+
+        Collider2D[] colliders = new Collider2D[0];
+
+        switch (_buildingTemplate)
+        {
+            case TowerTemplate towerTemplate:
+                colliders = 
+                    Physics2D.OverlapBoxAll(transform.position + new Vector3(0.0f, towerTemplate.LocalScale.y / 2, 0.0f), _checkSurroundingBox, 0.0f);
+                break;
+            case TrapTemplate trapTemplate:
+                colliders = Physics2D.OverlapCircleAll(transform.position, trapTemplate.LocalScale.x / 2.0f);
+                break;
+            default:
+                break;
+        }
+
         foreach (Collider2D collider in colliders)
         {
             ObstacleBase obstacle = collider.GetComponent<ObstacleBase>();
@@ -114,6 +134,16 @@ public class BuildingView : MonoBehaviour, IBuildingView
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position + new Vector3(0.0f, transform.localScale.y / 2, 0.0f), _checkSurroundingBox);
+        switch (_buildingTemplate)
+        {
+            case TowerTemplate towerTemplate:
+                Gizmos.DrawWireCube(transform.position + new Vector3(0.0f, towerTemplate.LocalScale.y / 2, 0.0f), _checkSurroundingBox);
+                break;
+            case TrapTemplate trapTemplate:
+                Gizmos.DrawWireSphere(transform.position, trapTemplate.LocalScale.x / 2.0f);
+                break;
+            default:
+                break;
+        }
     }
 }

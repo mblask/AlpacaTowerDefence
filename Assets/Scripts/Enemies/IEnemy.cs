@@ -31,4 +31,11 @@ public interface IEnemy
     /// </summary>
     /// <param name="value"></param>
     void Damage(float value = 0.0f);
+
+    /// <summary>
+    /// Damages <see cref="Enemy"/> object over time; dps = damage per second
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <param name="dps"></param>
+    void DamageOverTime(float duration, float dps);
 }

@@ -49,4 +49,9 @@ public class BuildingManager : MonoBehaviour, IBuildingManager
     {
         _currentBuildingView.SetupView(_gameAssets.GetTemplateByEnum(BuildingEnum.SpikeTrap));
     }
+
+    public void ViewFireTrap()
+    {
+        _currentBuildingView.SetupView(_gameAssets.GetTemplateByEnum(BuildingEnum.FireTrap));
+    }
 }

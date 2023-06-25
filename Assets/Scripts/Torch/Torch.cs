@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Torch : MonoBehaviour, ITorch
 {
+    private bool _isMoving = true;
+    private bool _isRotating = true;
+
     private Vector2 _movingDirection;
     private Vector2 _targetPosition;
     private float _speed = 2.0f;
@@ -22,6 +25,13 @@ public class Torch : MonoBehaviour, ITorch
         _rotationDirection = Utilities.ChanceFunc(50) ? 1.0f : -1.0f;
     }
 
+    public void SetupStaticTorch(bool isMoving, bool isRotating)
+    {
+        _isMoving = isMoving;
+        _isRotating = isRotating;
+        Destroy(gameObject, Random.Range(4.0f, 8.0f));
+    }
+
     private void Update()
     {
         move();
@@ -30,6 +40,9 @@ public class Torch : MonoBehaviour, ITorch
 
     private void move()
     {
+        if (!_isMoving)
+            return;
+
         if (_movingDirection == null || _movingDirection == Vector2.zero)
             return;
 
@@ -46,6 +59,9 @@ public class Torch : MonoBehaviour, ITorch
 
     private void rotate()
     {
+        if (!_isRotating)
+            return;
+
         transform.Rotate(0.0f, 0.0f, _rotationDirection * _rotationalSpeed * Time.deltaTime);
     }
 

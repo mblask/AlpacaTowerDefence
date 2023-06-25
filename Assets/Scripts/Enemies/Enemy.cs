@@ -7,6 +7,9 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private bool _isActive = true;
 
+    private bool _isDamagedOverTime = false;
+    private float _damageOverTimeTimer = 0.0f;
+
     [SerializeField] private EnemyHandler _enemyHandler;
 
     private void Awake()
@@ -50,6 +53,11 @@ public class Enemy : MonoBehaviour, IEnemy
 
         if (_enemyHandler.CurrentStats.Health <= 0.0f)
             Die();
+    }
+
+    public void DamageOverTime(float duration, float dps)
+    {
+        //Enemy handler procedure!!
     }
 
     public void Die()

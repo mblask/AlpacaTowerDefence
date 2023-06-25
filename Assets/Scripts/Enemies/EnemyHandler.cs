@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class EnemyHandler : IEnemyHandler
+public class EnemyHandler
 {
     public bool IsActive { get; private set; }
 
@@ -209,7 +209,10 @@ public class EnemyHandler : IEnemyHandler
             return;
 
         List<Collider2D> colliders = Physics2D.OverlapCircleAll(_enemyTransform.position, CurrentStats.Range)
-            .Where(collider => collider.GetComponent<Building>() != null)
+            .Where(collider => {
+                Building building = collider.GetComponent<Building>();
+                return building != null && building.IsVisible;
+            })
             .ToList();
 
         if (colliders.Count == 0)

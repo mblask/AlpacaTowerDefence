@@ -15,6 +15,7 @@ MonoBehaviour:
   Name: Stone Tower
   Building: 2
   Sprite: {fileID: 21300000, guid: 50cadacc1c6a36a46872947b6fd12480, type: 3}
+  LocalScale: {x: 1, y: 1}
   Color: {r: 0.4433962, g: 0.39110893, b: 0.39110893, a: 1}
   Cost: 100
   Health: 100

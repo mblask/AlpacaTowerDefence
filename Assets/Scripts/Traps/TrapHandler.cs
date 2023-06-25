@@ -1,3 +1,4 @@
+using AlpacaMyGames;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TrapHandler
 {
+    private TrapTemplate _trapTemplate;
     private Transform _trapTransform;
 
     private float _enemyCheckingTimer;
@@ -18,12 +20,17 @@ public class TrapHandler
     private TrapStats _initialStats;
     [field: SerializeField] public TrapStats CurrentStats { get; set; }
 
+    private GameAssets _gameAssets;
+
     public TrapHandler(TrapTemplate template, Transform trapTransform)
     {
+        _trapTemplate = template;
         _trapTransform = trapTransform;
 
         _initialStats = new TrapStats(template);
         CurrentStats = new TrapStats(_initialStats);
+
+        _gameAssets = GameAssets.Instance;
     }
 
     public void Damage(float damage)
@@ -41,14 +48,33 @@ public class TrapHandler
             return;
 
         _trapActivationTimer = 0.0f;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(_trapTransform.position, CurrentStats.Range);
-        foreach (Collider2D collider in colliders)
-        {
-            Enemy enemy = collider.GetComponent<Enemy>();
-            if (enemy == null)
-                continue;
 
-            enemy.Damage(CurrentStats.Damage);
+        switch (_trapTemplate.Building)
+        {
+            case BuildingEnum.SpikeTrap:
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(_trapTransform.position, CurrentStats.Range);
+                foreach (Collider2D collider in colliders)
+                {
+                    Enemy enemy = collider.GetComponent<Enemy>();
+                    if (enemy == null)
+                        continue;
+
+                    enemy.Damage(CurrentStats.Damage);
+                }
+                break;
+            case BuildingEnum.FireTrap:
+                int fireSources = 10;
+                for (int i = 0; i< fireSources; i++)
+                {
+                    Vector2 position = _trapTransform.position + Utilities.GetRandomLengthVector3(CurrentStats.Range, false);
+                    UnityEngine.Object.Instantiate(_gameAssets.Torch, position, Quaternion.identity)
+                        .GetComponent<ITorch>().SetupStaticTorch(false, false);
+                }
+                break;
+            case BuildingEnum.TarTrap:
+                break;
+            default:
+                break;
         }
 
         _trapTriggered = true;

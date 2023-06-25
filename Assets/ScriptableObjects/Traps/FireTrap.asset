@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3240ae9034ea3cc49919a6c3723c5a4a, type: 3}
-  m_Name: SpikeTrap
+  m_Name: FireTrap
   m_EditorClassIdentifier: 
-  Name: Spike Trap
-  Building: 6
+  Name: Fire Trap
+  Building: 7
   Sprite: {fileID: -2413806693520163455, guid: 729ce08463db0ee469e2767e2b0ff052, type: 3}
   LocalScale: {x: 0.5, y: 0.5}
-  Color: {r: 0.2924528, g: 0.18347275, b: 0.18347275, a: 1}
-  Cost: 15
-  Health: 20
+  Color: {r: 0.6431373, g: 0.35255733, b: 0, a: 1}
+  Cost: 20
+  Health: 10
   CrewNumber: 0
   BaseRepair: 0
-  Damage: 50
-  Range: 0.75
+  Damage: 40
+  Range: 1
   ResistDamage: 0
   EnemyCheckRate: 0.2
   TrapActivationTime: 0.8
