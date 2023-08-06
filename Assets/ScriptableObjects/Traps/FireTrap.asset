@@ -21,7 +21,7 @@ MonoBehaviour:
   Health: 10
   CrewNumber: 0
   BaseRepair: 0
-  Damage: 40
+  Damage: 20
   Range: 1
   ResistDamage: 0
   EnemyCheckRate: 0.2

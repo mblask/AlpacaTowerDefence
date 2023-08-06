@@ -24,7 +24,12 @@ public class EnemyHandler
     private float _buildingSearchTimer;
     private float _buildingAttackTimer;
 
-    [field:SerializeField] public EnemyStats CurrentStats { get; private set; }
+    private float _damageOverTimeDuration;
+    private float _damagePerSecond;
+    private bool _isDamagedOverTime = false;
+    private float _damageOverTimeTimer;
+
+    [field: SerializeField] public EnemyStats CurrentStats { get; set; }
 
     private IEnvironmentGenerator _environmentGenerator;
     private IParticleSystemSpawner _particleSystemSpawner;
@@ -105,6 +110,37 @@ public class EnemyHandler
     {
         _particleSystemSpawner.Spawn(_gameAssets.BloodPS, _enemyTransform.position);
         CurrentStats.Health -= value;
+    }
+
+    public void HandleDamageOverTime()
+    {
+        if (!_isDamagedOverTime)
+            return;
+
+        _damageOverTimeTimer += Time.deltaTime;
+
+        if (_damageOverTimeTimer >= _damageOverTimeDuration)
+        {
+            _damageOverTimeTimer = 0.0f;
+            _isDamagedOverTime = false;
+            return;
+        }
+
+        CurrentStats.Health -= _damagePerSecond * Time.deltaTime;
+
+        if (CurrentStats.Health <= 0.0f)
+            Die();
+    }
+
+    public void TriggerDamageOverTime(float duration, float dps)
+    {
+        if (_isDamagedOverTime)
+            return;
+
+        _isDamagedOverTime = true;
+
+        _damageOverTimeDuration = duration;
+        _damagePerSecond = dps;
     }
 
     public void Die()

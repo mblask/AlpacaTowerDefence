@@ -49,10 +49,10 @@ public class TrapHandler
 
         _trapActivationTimer = 0.0f;
 
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(_trapTransform.position, CurrentStats.Range);
         switch (_trapTemplate.Building)
         {
             case BuildingEnum.SpikeTrap:
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(_trapTransform.position, CurrentStats.Range);
                 foreach (Collider2D collider in colliders)
                 {
                     Enemy enemy = collider.GetComponent<Enemy>();
@@ -68,7 +68,16 @@ public class TrapHandler
                 {
                     Vector2 position = _trapTransform.position + Utilities.GetRandomLengthVector3(CurrentStats.Range, false);
                     UnityEngine.Object.Instantiate(_gameAssets.Torch, position, Quaternion.identity)
-                        .GetComponent<ITorch>().SetupStaticTorch(false, false);
+                        .GetComponent<ITorch>().SetupStaticTorch(false);
+
+                    foreach (Collider2D collider in colliders)
+                    {
+                        Enemy enemy = collider.GetComponent<Enemy>();
+                        if (enemy == null)
+                            continue;
+
+                        enemy.DamageOverTime(CurrentStats.Damage, UnityEngine.Random.Range(2.0f, 4.0f));
+                    }
                 }
                 break;
             case BuildingEnum.TarTrap:

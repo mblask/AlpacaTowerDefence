@@ -25,9 +25,9 @@ public class Torch : MonoBehaviour, ITorch
         _rotationDirection = Utilities.ChanceFunc(50) ? 1.0f : -1.0f;
     }
 
-    public void SetupStaticTorch(bool isMoving, bool isRotating)
+    public void SetupStaticTorch(bool isRotating)
     {
-        _isMoving = isMoving;
+        _isMoving = false;
         _isRotating = isRotating;
         Destroy(gameObject, Random.Range(4.0f, 8.0f));
     }

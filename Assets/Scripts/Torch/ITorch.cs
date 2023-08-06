@@ -14,5 +14,5 @@ public interface ITorch
     /// </summary>
     /// <param name="isMoving"></param>
     /// <param name="isRotating"></param>
-    void SetupStaticTorch(bool isMoving, bool isRotating);
+    void SetupStaticTorch(bool isRotating);
 }

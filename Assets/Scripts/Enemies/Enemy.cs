@@ -7,9 +7,6 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private bool _isActive = true;
 
-    private bool _isDamagedOverTime = false;
-    private float _damageOverTimeTimer = 0.0f;
-
     [SerializeField] private EnemyHandler _enemyHandler;
 
     private void Awake()
@@ -21,6 +18,7 @@ public class Enemy : MonoBehaviour, IEnemy
     {
         _enemyHandler.LayPath();
         _enemyHandler.HandleBehaviour();
+        _enemyHandler.HandleDamageOverTime();
     }
 
     public IEnemy SetupEnemy(EnemyTemplate enemyTemplate)
@@ -57,7 +55,7 @@ public class Enemy : MonoBehaviour, IEnemy
 
     public void DamageOverTime(float duration, float dps)
     {
-        //Enemy handler procedure!!
+        _enemyHandler.TriggerDamageOverTime(duration, dps);
     }
 
     public void Die()
