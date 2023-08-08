@@ -69,13 +69,11 @@ public class Tower : Building, ITower
 
     public override void Interact()
     {
-        //Debug.Log($"Interact with building: {name}");
         _towerRadiusMarker.gameObject.SetActive(true);
     }
 
     public override void StopInteracting()
     {
-        //Debug.Log($"Stop interacting with building: {name}");
         _towerRadiusMarker.gameObject.SetActive(false);
     }
 

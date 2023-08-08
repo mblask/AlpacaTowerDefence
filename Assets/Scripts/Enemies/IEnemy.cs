@@ -38,4 +38,10 @@ public interface IEnemy
     /// <param name="duration"></param>
     /// <param name="dps"></param>
     void DamageOverTime(float duration, float dps);
+
+    /// <summary>
+    /// Returns the <see cref="EnemyHandler"/> of the <see cref="Enemy"/> object
+    /// </summary>
+    /// <returns></returns>
+    EnemyHandler GetEnemyHandler();
 }

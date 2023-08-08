@@ -15,12 +15,14 @@ public class KeyboardInput : MonoBehaviour
     [SerializeField] private KeyCode _woodenOutpostKey;
     [SerializeField] private KeyCode _woodenTowerKey;
     [SerializeField] private KeyCode _stoneTowerKey;
+    [SerializeField] private KeyCode _sharpshooterTowerKey;
     [SerializeField] private KeyCode _towerComplexKey;
     [SerializeField] private KeyCode _fortKey;
     [SerializeField] private KeyCode _castleKey;
 
     [Header("Selection keys")]
     [SerializeField] private KeyCode _trapSelectionKey;
+    [SerializeField] private KeyCode _trapResetKey;
 
     [Header("Trap keys")]
     [SerializeField] private KeyCode _spikeTrapKey;
@@ -60,6 +62,7 @@ public class KeyboardInput : MonoBehaviour
         viewTowers();
         viewTraps();
 
+        resetTrap();
         repairBuilding();
         repairAllBuildings();
         towerArmorUpgrade();
@@ -75,6 +78,7 @@ public class KeyboardInput : MonoBehaviour
         viewWoodenOutpost();
         viewWoodenTower();
         viewStoneTower();
+        viewSharpshooterTower();
         viewTowerComplex();
         viewFort();
         viewCastle();
@@ -103,6 +107,12 @@ public class KeyboardInput : MonoBehaviour
         if (Input.GetKeyUp(_stoneTowerKey))
             _buildingManager.ViewStoneTower();
     }
+
+    private void viewSharpshooterTower()
+    {
+        if (Input.GetKeyUp(_sharpshooterTowerKey))
+            _buildingManager.ViewSharpshooterTower();
+    }
     
     private void viewTowerComplex()
     {
@@ -120,6 +130,12 @@ public class KeyboardInput : MonoBehaviour
     {
         if (Input.GetKeyUp(_castleKey))
             Debug.Log("View castle");
+    }
+
+    private void resetTrap()
+    {
+        if (Input.GetKey(_trapSelectionKey) && Input.GetKeyDown(_trapResetKey))
+            _interactableManager.GetCurrentInteractableObject()?.GetComponent<ITrap>()?.ResetTrap();
     }
 
     private void viewSpikeTrap()

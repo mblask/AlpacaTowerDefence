@@ -1,15 +1,15 @@
 using AlpacaMyGames;
 using UnityEngine;
 
-public class Canonball : MonoBehaviour, IMissile
-{    
+public class Arrow : MonoBehaviour, IMissile
+{
     private Rigidbody2D _rigidbody;
 
     private Vector2 _targetPosition;
     private Vector2 _movingDirection;
-    private float _speed = 5.0f;
+    private float _speed = 6.0f;
     public float Speed => _speed;
-    private float _destructionRadius = 0.4f;
+    private float _effectRadius = 0.2f;
     private Vector2 _damage;
 
     private GameAssets _gameAssets;
@@ -17,11 +17,6 @@ public class Canonball : MonoBehaviour, IMissile
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    private void Start()
-    {
-        _gameAssets = GameAssets.Instance;
     }
 
     private void FixedUpdate()
@@ -35,6 +30,9 @@ public class Canonball : MonoBehaviour, IMissile
         _targetPosition = targetPosition;
         _movingDirection = _targetPosition - (Vector2)transform.position;
         _movingDirection.Normalize();
+
+        float angle = Mathf.Atan2(_movingDirection.y, _movingDirection.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
     }
 
     private void move()
@@ -53,20 +51,12 @@ public class Canonball : MonoBehaviour, IMissile
     public void MissileMeetsTarget()
     {
         checkHitRadius();
-
-        float destroyObjectAfter = 1.0f;
-        Instantiate(_gameAssets.CanonballExplodePS, transform.position, Quaternion.identity, null)
-            .DestroyObject(destroyObjectAfter);
-
-        IDestructionArea destructionArea = Instantiate(_gameAssets.DestructionArea, transform.position, Quaternion.identity, null).GetComponent<IDestructionArea>();
-        destructionArea.Setup(_destructionRadius);
-
         Destroy(gameObject);
     }
 
     private void checkHitRadius()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _destructionRadius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _effectRadius);
         foreach (Collider2D collider in colliders)
         {
             ITower tower = collider.GetComponent<ITower>();

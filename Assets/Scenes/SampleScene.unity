@@ -283,9 +283,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BuildingTemplates:
-  - {fileID: 11400000, guid: 0f73723c701b43d4eb6a4e716764737b, type: 2}
   - {fileID: 11400000, guid: 5965f4e101c5c4a43816194503095e95, type: 2}
   - {fileID: 11400000, guid: d3696b2f8dd981945afdb64cd1133274, type: 2}
+  - {fileID: 11400000, guid: 0f73723c701b43d4eb6a4e716764737b, type: 2}
+  - {fileID: 11400000, guid: c61d329a0981bd0469ff260e8261d43f, type: 2}
   - {fileID: 11400000, guid: 88d6f73579f94034d9bb5018f54f6da0, type: 2}
   - {fileID: 11400000, guid: cbcc1cb53ee7b574db4044e8f7e63eaa, type: 2}
   EnemyTemplates:
@@ -297,6 +298,7 @@ MonoBehaviour:
   Trap: {fileID: 8026411441123755770, guid: 5e552cf4b60086f45a07775e97b51a09, type: 3}
   Enemy: {fileID: 8515429719167282671, guid: b65cd8ea0dea44c4aa1ebf25f4b73d49, type: 3}
   Canonball: {fileID: 2788675210573203231, guid: 0812b3d4f371e9441a1149e512793cf6, type: 3}
+  Arrow: {fileID: 2956929735095673927, guid: b7e1b375531761e47ad8529fd1e70229, type: 3}
   DestructionArea: {fileID: 6223586052196916371, guid: c8d36e49fd194214c992b2de9e30512a, type: 3}
   CheckpointPrefab: {fileID: 2738569333470577060, guid: c7f36bfc8e0d87c4bb634e99f00f2a7f, type: 3}
   Spawnpoint: {fileID: 3223418355999352694, guid: 267d73e6683b1424895ba8976c089c89, type: 3}
@@ -973,10 +975,12 @@ MonoBehaviour:
   _woodenOutpostKey: 49
   _woodenTowerKey: 50
   _stoneTowerKey: 51
-  _towerComplexKey: 52
-  _fortKey: 53
-  _castleKey: 54
+  _sharpshooterTowerKey: 52
+  _towerComplexKey: 53
+  _fortKey: 54
+  _castleKey: 55
   _trapSelectionKey: 116
+  _trapResetKey: 114
   _spikeTrapKey: 49
   _fireTrapKey: 50
   _equalBuildingActionKey: 306

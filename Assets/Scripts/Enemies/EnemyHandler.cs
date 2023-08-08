@@ -30,6 +30,7 @@ public class EnemyHandler
     private float _damageOverTimeTimer;
 
     [field: SerializeField] public EnemyStats CurrentStats { get; set; }
+    public Vector2 MovingDirection => _movingDirection;
 
     private IEnvironmentGenerator _environmentGenerator;
     private IParticleSystemSpawner _particleSystemSpawner;

@@ -26,6 +26,7 @@ public class GameAssets : MonoBehaviour
     public Transform Trap;
     public Transform Enemy;
     public Transform Canonball;
+    public Transform Arrow;
     public Transform DestructionArea;
     public Transform CheckpointPrefab;
     public Transform Spawnpoint;

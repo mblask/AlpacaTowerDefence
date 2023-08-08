@@ -10,6 +10,8 @@ public class TowerHandler
     private Transform _towerTransform;
     private Transform _shootingSpotTransform;
 
+    private Transform _towerMissile;
+
     private List<Transform> _enemiesInSight = new List<Transform>();
 
     private TowerTemplate _towerTemplate;
@@ -35,6 +37,21 @@ public class TowerHandler
         CurrentStats = new TowerStats(_initialStats);
 
         _gameAssets = GameAssets.Instance;
+
+        switch (_towerTemplate.Building)
+        {
+            case BuildingEnum.WoodenOutpost:
+            case BuildingEnum.WoodenTower:
+                _towerMissile = _gameAssets.Arrow;
+                break;
+            case BuildingEnum.StoneTower:
+            case BuildingEnum.SharpshooterTower:
+            case BuildingEnum.TowerComplex:
+                _towerMissile = _gameAssets.Canonball;
+                break;
+            default:
+                break;
+        }
     }
 
     public void Damage(float damage)
@@ -89,11 +106,25 @@ public class TowerHandler
         Transform randomTransform = _enemiesInSight.GetRandomElement();
         if (randomTransform != null)
         {
-            ICanonball canonball = UnityEngine.Object.Instantiate(_gameAssets.Canonball, _shootingSpotTransform.position, Quaternion.identity, null).GetComponent<ICanonball>();
-            Vector2 targetPosition = (Vector2)randomTransform.position + Utilities.GetRandomVector2(CurrentStats.Precision);
+            IMissile canonball = UnityEngine.Object
+                .Instantiate(_towerMissile, _shootingSpotTransform.position, Quaternion.identity, null).GetComponent<IMissile>();
 
-            canonball.SetupCanonball(targetPosition, CurrentStats.Damage);
+            EnemyHandler enemy = randomTransform.GetComponent<IEnemy>().GetEnemyHandler();
+            float enemyMovingSpeed = enemy.CurrentStats.MovingSpeed;
+            Vector2 enemyMovingDirection = enemy.MovingDirection;
+            float missileMovingTime = (randomTransform.position - _towerTransform.position).magnitude / canonball.Speed;
+            
+            Vector2 targetPosition = projectedTargetPosition(randomTransform.position, enemyMovingSpeed, enemyMovingDirection, missileMovingTime);
+
+            canonball.SetupMissile(targetPosition, CurrentStats.Damage);
         }
+    }
+
+    private Vector2 projectedTargetPosition(Vector3 towerPosition, float enemyMovingSpeed, Vector2 enemyMovingDirection, float missileMovingTime)
+    {
+        return (Vector2)towerPosition +
+                enemyMovingSpeed * enemyMovingDirection * missileMovingTime +
+                Utilities.GetRandomVector2(CurrentStats.Precision);
     }
 
     public void EnemyCheckingProcedure()

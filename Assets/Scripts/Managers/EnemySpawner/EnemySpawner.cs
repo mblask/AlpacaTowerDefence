@@ -33,7 +33,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
         _instance = this;
     }
-    
+
     private void Start()
     {
         _gameAssets = GameAssets.Instance;

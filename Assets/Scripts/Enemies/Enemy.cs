@@ -88,6 +88,11 @@ public class Enemy : MonoBehaviour, IEnemy
         transform.rotation = defaultRotation;
     }
 
+    public EnemyHandler GetEnemyHandler()
+    {
+        return _enemyHandler;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position, _enemyHandler.CurrentStats.Range);

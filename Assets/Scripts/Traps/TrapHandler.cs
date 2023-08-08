@@ -89,6 +89,14 @@ public class TrapHandler
         _trapTriggered = true;
     }
 
+    public void ResetTrap()
+    {
+        if (_trapTemplate.Building != BuildingEnum.SpikeTrap)
+            return;
+
+        _trapTriggered = false;
+    }
+
     public void EnemyCheckingProcedure()
     {
         if (_trapTriggered)

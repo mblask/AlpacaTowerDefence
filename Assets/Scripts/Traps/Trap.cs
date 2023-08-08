@@ -34,6 +34,11 @@ public class Trap : Building, ITrap
         _trapHandler = new TrapHandler(trapTemplate, transform);
     }
 
+    public void ResetTrap()
+    {
+        _trapHandler.ResetTrap();
+    }
+
     public override void Repair()
     {
         //No repairs for traps
