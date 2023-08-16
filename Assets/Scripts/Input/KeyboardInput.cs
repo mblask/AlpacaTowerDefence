@@ -62,7 +62,6 @@ public class KeyboardInput : MonoBehaviour
         viewTowers();
         viewTraps();
 
-        resetTrap();
         repairBuilding();
         repairAllBuildings();
         towerArmorUpgrade();
@@ -130,12 +129,6 @@ public class KeyboardInput : MonoBehaviour
     {
         if (Input.GetKeyUp(_castleKey))
             Debug.Log("View castle");
-    }
-
-    private void resetTrap()
-    {
-        if (Input.GetKey(_trapSelectionKey) && Input.GetKeyDown(_trapResetKey))
-            _interactableManager.GetCurrentInteractableObject()?.GetComponent<ITrap>()?.ResetTrap();
     }
 
     private void viewSpikeTrap()

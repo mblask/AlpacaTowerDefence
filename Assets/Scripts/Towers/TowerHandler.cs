@@ -38,18 +38,19 @@ public class TowerHandler
 
         _gameAssets = GameAssets.Instance;
 
-        switch (_towerTemplate.Building)
+        setTowerMissile(template.Building);
+    }
+
+    private void setTowerMissile(BuildingEnum buildingType)
+    {
+        switch (buildingType)
         {
             case BuildingEnum.WoodenOutpost:
             case BuildingEnum.WoodenTower:
                 _towerMissile = _gameAssets.Arrow;
                 break;
-            case BuildingEnum.StoneTower:
-            case BuildingEnum.SharpshooterTower:
-            case BuildingEnum.TowerComplex:
-                _towerMissile = _gameAssets.Canonball;
-                break;
             default:
+                _towerMissile = _gameAssets.Canonball;
                 break;
         }
     }

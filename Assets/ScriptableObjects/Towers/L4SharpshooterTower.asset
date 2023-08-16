@@ -17,7 +17,7 @@ MonoBehaviour:
   Sprite: {fileID: 21300000, guid: 50cadacc1c6a36a46872947b6fd12480, type: 3}
   LocalScale: {x: 1, y: 1}
   Color: {r: 0, g: 1, b: 0.5411823, a: 1}
-  Cost: 90
+  Cost: 120
   Health: 70
   CrewNumber: 3
   BaseRepair: 0.3
@@ -28,4 +28,4 @@ MonoBehaviour:
   ShootingRatePercentageWhileRepairing: 0.75
   Range: 6
   ResistDamage: 5
-  ChanceToKillCrewMember: 20
+  ChanceToKillCrewMember: 10

@@ -16,6 +16,7 @@ public class TrapHandler
 
     public bool TrapTriggered => _trapTriggered;
     private bool _trapTriggered = false;
+    private bool _trapRepaired = false;
 
     private TrapStats _initialStats;
     [field: SerializeField] public TrapStats CurrentStats { get; set; }
@@ -94,7 +95,11 @@ public class TrapHandler
         if (_trapTemplate.Building != BuildingEnum.SpikeTrap)
             return;
 
+        if (_trapRepaired && _trapTriggered)
+            return;
+
         _trapTriggered = false;
+        _trapRepaired = true;
     }
 
     public void EnemyCheckingProcedure()

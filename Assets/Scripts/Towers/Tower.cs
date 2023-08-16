@@ -9,8 +9,8 @@ public class Tower : Building, ITower
     public override float Health
     {
         get 
-        { 
-            return _towerHandler.CurrentStats.Health; 
+        {
+            return _towerHandler.CurrentStats.Health;
         }
     }
 
